@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-nombre-mystere',
@@ -6,23 +7,31 @@ import { Component } from '@angular/core';
   styleUrls: ['./nombre-mystere.component.scss'],
 })
 export class NombreMystereComponent {
+  constructor(title: Title, meta: Meta) {
+    title.setTitle('Anguleux - Nombre Mystère');
+    meta.updateTag({
+      name: 'description',
+      content:
+        'Petit jeu qui consiste à deviner un nombre aléatoire entre 0 et 100.',
+    });
+  }
   bet = false;
-  difficulty = true;
+  intro = true;
   game = false;
 
-  showDifficulty = () => {
+  showIntro = () => {
     this.bet = false;
-    this.difficulty = true;
+    this.intro = true;
     this.game = false;
   };
   showBet = () => {
     this.bet = true;
-    this.difficulty = false;
+    this.intro = false;
     this.game = false;
   };
   showGame = () => {
     this.bet = false;
-    this.difficulty = false;
+    this.intro = false;
     this.game = true;
   };
 }

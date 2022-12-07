@@ -1,0 +1,27 @@
+<h2>Etape 1 : Introduction</h2>
+<p>Il existe deux options de jeux possibles :</p>
+<ul>
+  <li>
+    L'option basique : Nombre de tentatives illimités. Pour y accéder il suffit
+    de passer directement à
+    <span class="important" (click)="showStepThree()" id="step3">l'Etape 3</span
+    >.
+  </li>
+  <br />
+  <li>
+    L'option "nombre de tentatives limitées" : en cochant cette case, vous
+    pourrez parier sur le nombre de tentatives dont vous aurez besoin pour
+    découvrir le nombre mystère... <br />
+    Prêt(e) à prendre le risque ? Oui ? Alors passez à
+    <span class="important" (click)="showStepTwo()" id="step">l'Etape 2</span>
+    !
+    <!-- <input
+      type="checkbox"
+      id="harderPleaseCheckbox"
+      [disabled]="isCheckDisabled"
+      [checked]="harderPlease"
+      (change)="harderPlease = !harderPlease"
+      (click)="allowLimitations()"
+    /> -->
+  </li>
+</ul>

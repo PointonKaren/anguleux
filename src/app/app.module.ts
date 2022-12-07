@@ -10,7 +10,7 @@ import { PenduComponent } from './pendu/pendu.component';
 import { TetrisComponent } from './tetris/tetris.component';
 import { AboutMeComponent } from './about-me/about-me.component';
 import { NmBetComponent } from './nombre-mystere/nm-bet/nm-bet.component';
-import { NmDifficultyComponent } from './nombre-mystere/nm-difficulty/nm-difficulty.component';
+import { NmIntroComponent } from './nombre-mystere/nm-intro/nm-intro.component';
 import { NmGameComponent } from './nombre-mystere/nm-game/nm-game.component';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -27,7 +27,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     TetrisComponent,
     AboutMeComponent,
     NmBetComponent,
-    NmDifficultyComponent,
+    NmIntroComponent,
     NmGameComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule],
