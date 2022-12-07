@@ -1,0 +1,63 @@
+<div class="games">
+  <div class="cube-wrap">
+    <div class="cube">
+      <div class="top">
+        <h2 class="games-title">Liste des jeux</h2>
+      </div>
+      <div class="front">
+        <p
+          routerLink="/nombre-mystere"
+          class="link"
+          (mouseenter)="justePrix = true"
+          (mouseleave)="justePrix = false"
+        >
+          Nombre Mystère
+        </p>
+        <p
+          routerLink="/mastermind"
+          class="link"
+          (mouseenter)="mastermind = true"
+          (mouseleave)="mastermind = false"
+        >
+          Mastermind
+        </p>
+        <p
+          routerLink="/pendu"
+          class="link"
+          (mouseenter)="pendu = true"
+          (mouseleave)="pendu = false"
+        >
+          Pendu
+        </p>
+        <p
+          routerLink="/tetris"
+          class="link"
+          (mouseenter)="tetris = true"
+          (mouseleave)="tetris = false"
+        >
+          Tetris
+        </p>
+      </div>
+      <div class="back"></div>
+      <div class="bottom"></div>
+      <div class="left">
+        <p class="games-description" *ngIf="justePrix">
+          Le navigateur choisit un nombre au hasard entre 0 et 100, à vous de le
+          deviner !
+        </p>
+        <p class="games-description" *ngIf="mastermind">
+          Le navigateur sélectionne une séquence de couleurs, à vous de la
+          deviner !
+        </p>
+        <p class="games-description" *ngIf="pendu">
+          Le navigateur choisit un mot, vous avez un nombre limité de tentatives
+          pour le deviner.
+        </p>
+        <p class="games-description" *ngIf="tetris">
+          Purement et simplement : Tetris ;)
+        </p>
+      </div>
+      <div class="right"></div>
+    </div>
+  </div>
+</div>

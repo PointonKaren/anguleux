@@ -1,0 +1,58 @@
+<h2>Etape 3 : à vous marques... prêts... jouez !</h2>
+<div class="game">
+  <div class="game--form">
+    <p [innerHTML]="tryRule"></p>
+    <p>
+      <label for="number"
+        >À vos propositions ! <br />Choisissez un nombre entre 0 et 100 :</label
+      >
+    </p>
+    <div class="form">
+      <input
+        type="number"
+        [formControl]="number"
+        min="0"
+        max="100"
+        (keyup.enter)="isBasicDisabled ? 'true' : checkThenRandom()"
+        [ngClass]="{ disableClass: isBasicDisabled }"
+      />
+      <button
+        type="button"
+        (click)="checkThenRandom()"
+        [disabled]="isBasicDisabled"
+        [ngClass]="{ disableClass: isBasicDisabled }"
+      >
+        Envoyer
+      </button>
+    </div>
+  </div>
+  <div class="game--results">
+    <p [innerHTML]="result"></p>
+    <p [innerHTML]="numberOfTriesLeft"></p>
+    <tbody class="game--results--table">
+      <tr>
+        <th>Essai n°</th>
+        <th>Nombre tenté</th>
+        <th>
+          <span class="important">🡹</span>, <span class="important">🡻</span> ou
+          <span class="important">✔</span>
+        </th>
+      </tr>
+      <tr *ngFor="let attempt of attempts">
+        <td>{{ attempt.count }}</td>
+        <td>
+          {{ attempt.number }}
+        </td>
+        <td [innerHTML]="attempt.status"></td>
+      </tr>
+    </tbody>
+  </div>
+</div>
+<p class="resetButton">
+  <button
+    (click)="resetFunction()"
+    [innerHTML]="reset"
+    [disabled]="isResetDisabled"
+    [ngClass]="{ disableClass: isResetDisabled }"
+  ></button>
+</p>

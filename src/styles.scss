@@ -1,1 +1,48 @@
-/* You can add global styles to this file, and also import other style files */
+// Utils
+@import "./assets/style/utils/variables";
+@import "./assets/style/utils/mixins";
+
+// Responsive
+@import "./assets/style/responsive/mobile";
+@import "./assets/style/responsive/tablette";
+
+// component
+@import "./assets/style/components/buttons";
+
+body {
+  background-color: $body;
+  width: 100%;
+  margin: 0;
+}
+* {
+  color: $text;
+  font-family: Verdana, Tahoma, sans-serif;
+  font-size: 1.1rem;
+}
+h1 {
+  color: $h1;
+  font-size: 2.8rem;
+  text-align: center;
+}
+h2 {
+  color: $h2;
+  font-size: 1.8rem;
+  text-align: center;
+}
+h3 {
+  color: $h3;
+  font-size: 1.2rem;
+}
+p {
+  line-height: 2.2rem;
+}
+.important {
+  color: $important;
+}
+.status {
+  position: relative;
+  bottom: 2px;
+}
+a {
+  text-decoration: none;
+}

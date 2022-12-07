@@ -1,0 +1,66 @@
+@import "../../assets/style/utils/variables";
+@import "../../assets/style/utils/mixins";
+
+#MysteryNumber {
+  .nm-box {
+    width: 70%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    span {
+      color: $seven;
+      border-bottom: 1px solid $seven;
+      border-right: 1px solid $seven;
+      border-bottom-right-radius: 8px;
+      display: block;
+      padding-right: 10px;
+      padding-left: 10px;
+      padding-bottom: 5px;
+    }
+  }
+  .game {
+    width: 80vw;
+    max-width: 1200px;
+    margin: auto;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    &--form {
+      width: 50%;
+      .form {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        gap: 15px;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+      }
+    }
+    &--results {
+      margin: auto;
+      text-align: center;
+      &--table {
+        tr {
+          th {
+            border: 1px solid $seven;
+            width: 200px;
+            text-align: center;
+          }
+          td {
+            border: 1px solid $six;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+  .resetButton {
+    width: 200px;
+    margin: auto;
+    margin-top: 20px;
+  }
+}

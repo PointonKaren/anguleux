@@ -1,0 +1,21 @@
+@import "../assets/style/utils/variables";
+@import "../assets/style/utils/mixins";
+
+nav {
+  border-bottom: 2px solid $six;
+  background-color: $height;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  a {
+    margin: auto;
+    text-decoration: none;
+    color: $three;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .active {
+    color: $four;
+    font-size: larger;
+    font-weight: bolder;
+  }
+}
