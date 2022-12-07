@@ -36,7 +36,7 @@ describe('Test de la fonction showIntro du nombre mystère', () => {
     expect(component.bet).toBeFalsy();
   });
 
-  it("L'onglet 'Difficulté' est visible", () => {
+  it("L'onglet d'introduction est visible", () => {
     component.showIntro();
     expect(component.intro).toBeTruthy();
   });
@@ -78,7 +78,7 @@ describe('Test de la fonction showBet du nombre mystère', () => {
     expect(component.bet).toBeTruthy();
   });
 
-  it("L'onglet 'Difficulté' n'est pas visible", () => {
+  it("L'onglet d'introduction n'est pas visible", () => {
     component.showBet();
     expect(component.intro).toBeFalsy();
   });
@@ -108,7 +108,7 @@ describe('Test de la fonction showGame du nombre mystère', () => {
     fixture.detectChanges();
   });
 
-  it('Le clic sur la span a bien déclenché la fonction showBet()', () => {
+  it('Le clic sur la span a bien déclenché la fonction showGame()', () => {
     spyOn(component, 'showGame');
     let tab = fixture.debugElement.nativeElement.querySelector('#game');
     tab.click();
@@ -120,7 +120,7 @@ describe('Test de la fonction showGame du nombre mystère', () => {
     expect(component.bet).toBeFalsy();
   });
 
-  it("L'onglet 'Difficulté' n'est pas visible", () => {
+  it("L'onglet d'introduction n'est pas visible", () => {
     component.showGame();
     expect(component.intro).toBeFalsy();
   });
