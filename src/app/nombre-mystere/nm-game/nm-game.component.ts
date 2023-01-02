@@ -25,7 +25,14 @@ export class NmGameComponent implements OnInit {
   numberOfTriesLeft = '';
   reset = 'Réinitialiser le jeu';
 
-  harderPlease = false;
+  betDatas = [];
+  storage = localStorage.getItem('storedDatas');
+  datas = JSON.parse(
+    this.storage != null ? this.storage : JSON.stringify(this.betDatas)
+  );
+
+  harderPlease = this.datas[0].value;
+  betValue = this.datas[1].value;
   isCheckDisabled = false;
   isResetDisabled = true;
   isTriesDisabled = true;
@@ -33,6 +40,15 @@ export class NmGameComponent implements OnInit {
   sameNumber = false;
 
   attempts = new Array();
+
+  checkIfBet = () => {
+    if (this.betValue === 1) {
+      this.tryRule = `Quel courage ! Vous avez parié que vous réussirez à trouver le Nombre Mystère en 1 tentative !`;
+    }
+    if (this.betValue != null && this.betValue != 1) {
+      this.tryRule = `Vous avez parié que vous trouverez le Nombre Mystère en <span class="important">${this.betValue}</span> tentatives !`;
+    }
+  };
 
   checkThenRandom = () => {
     this.result = '';
@@ -79,7 +95,7 @@ export class NmGameComponent implements OnInit {
     if (this.reset === 'Nouvelle partie') {
       this.reset = 'Réinitialiser le jeu';
     }
-    this.harderPlease = false;
+    this.harderPlease = this.datas[0].value;
     this.isBasicDisabled = false;
     this.isResetDisabled = true;
     this.isCheckDisabled = false;
@@ -90,6 +106,7 @@ export class NmGameComponent implements OnInit {
   randomFunction = () => {
     this.isCheckDisabled = true;
     this.isResetDisabled = false;
+    this.tryRule = '';
     if (this.number.value === null) {
       this.result = 'Veuillez écrire un nombre dans le formulaire.';
     } else {
@@ -123,19 +140,19 @@ export class NmGameComponent implements OnInit {
     if (this.harderPlease === true) {
       // Activation du mode "nombre de tentative limité"
       this.tryText = '';
-      if (this.tries.value === null) {
-        this.tryText = 'Veuillez écrire un nombre dans le formulaire.';
+      if (this.betValue === null) {
+        this.tryText = "Veuillez définir un nombre de tentative dans l'étape 2";
       } else if (this.isWon != true) {
-        if (this.count >= this.tries.value) {
+        if (this.count >= this.betValue) {
           this.numberOfTriesLeft =
             'Perdu ! Le nombre de tentatives autorisé a été dépassé.';
         } else {
-          this.leftTries = this.tries.value - this.count;
-          this.numberOfTriesLeft = `Sur les <span class="important">${this.tries.value}</span> tentatives prévues, il en reste <span class="important">${this.leftTries}</span>.`;
+          this.leftTries = this.betValue - this.count;
+          this.numberOfTriesLeft = `Sur les <span class="important">${this.betValue}</span> tentatives prévues, il en reste <span class="important">${this.leftTries}</span>.`;
         }
       } else {
-        this.leftTries = this.tries.value - this.count;
-        this.numberOfTriesLeft = `Sur les <span class="important">${this.tries.value}</span> tentatives prévues, il en restait <span class="important">${this.leftTries}</span> !`;
+        this.leftTries = this.betValue - this.count;
+        this.numberOfTriesLeft = `Sur les <span class="important">${this.betValue}</span> tentatives prévues, il en restait <span class="important">${this.leftTries}</span> !`;
       }
     }
   };
@@ -143,5 +160,7 @@ export class NmGameComponent implements OnInit {
   ngOnInit(): void {
     this.tries = new FormControl(1);
     console.log(`Le nombre aléatoire est : ${this.random}`);
+    this.checkIfBet();
   }
 }
+//TODO: Faire que le bouton réinitialiser le jeu réinitialise également le pari et redirige vers Etape 1

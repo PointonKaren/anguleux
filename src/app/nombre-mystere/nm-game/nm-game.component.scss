@@ -1,0 +1,40 @@
+@import "../../../assets/style/utils/variables";
+@import "../../../assets/style/utils/mixins";
+
+.game {
+  width: 80vw;
+  max-width: 1200px;
+  margin: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  &--form {
+    width: 50%;
+    .form {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      gap: 15px;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+    }
+  }
+  &--results {
+    margin: auto;
+    text-align: center;
+    &--table {
+      tr {
+        th {
+          border: 1px solid $seven;
+          width: 200px;
+          text-align: center;
+        }
+        td {
+          border: 1px solid $six;
+          text-align: center;
+        }
+      }
+    }
+  }
+}

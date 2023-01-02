@@ -1,1 +1,52 @@
-<p>nm-bet works!</p>
+<h2>Activer le mode "Pari"</h2>
+<h3>
+  Cette section permet de prédire le nombre de tentatives nécessaires pour
+  deviner le Nombre Mystère.
+</h3>
+<p>
+  Cocher cette case pour activer le mode "Pari" du jeu :
+  <input
+    type="checkbox"
+    id="harderPleaseCheckbox"
+    [disabled]="isCheckDisabled"
+    [checked]="harderPlease"
+    (change)="harderPlease = !harderPlease"
+  />
+</p>
+
+<div *ngIf="harderPlease">
+  <p>
+    Choisir un nombre entre 1 et 99 :
+    <input
+      type="number"
+      [formControl]="tries"
+      min="1"
+      max="99"
+      id="betInput"
+      (keyup.enter)="isTriesDisabled ? 'true' : betFunction()"
+    />
+    <button
+      type="button"
+      (click)="betFunction()"
+      [disabled]="isTriesDisabled"
+      [ngClass]="{ disableClass: isTriesDisabled }"
+      id="betButton"
+    >
+      Envoyer
+    </button>
+    <span [innerHTML]="tryText"></span>
+  </p>
+  <p class="resetButton">
+    <button
+      (click)="resetFunction()"
+      [disabled]="isResetDisabled"
+      [ngClass]="{ disableClass: isResetDisabled }"
+    >
+      Changer mon pari
+    </button>
+  </p>
+</div>
+<p>
+  <span class="important">NB:</span> La possibilité de pouvoir générer un nombre
+  de tentatives aléatoire est en cours de développement.
+</p>
