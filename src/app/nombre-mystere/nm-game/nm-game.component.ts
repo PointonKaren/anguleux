@@ -16,12 +16,11 @@ export class NmGameComponent implements OnInit {
   max = 100;
   random = Math.floor(Math.random() * (this.max - this.min)) + this.min;
   count = 0;
-  leftTries = 99;
 
   result = '';
   status = '';
   tryText = '';
-  tryRule = '';
+  tryRule = 'À vos propositions !';
   numberOfTriesLeft = '';
   reset = 'Réinitialiser le jeu';
 
@@ -31,8 +30,18 @@ export class NmGameComponent implements OnInit {
     this.storage != null ? this.storage : JSON.stringify(this.betDatas)
   );
 
+  attemptsDatasArray = [];
+  attemptsStorage = localStorage.getItem('attempts');
+  attemptsDatas = JSON.parse(
+    this.attemptsStorage != null
+      ? this.attemptsStorage
+      : JSON.stringify(this.attemptsDatasArray)
+  );
+
   harderPlease = this.datas[0].value;
   betValue = this.datas[1].value;
+  leftTries = this.datas[2].value;
+
   isCheckDisabled = false;
   isResetDisabled = true;
   isTriesDisabled = true;
@@ -44,8 +53,18 @@ export class NmGameComponent implements OnInit {
   checkIfBet = () => {
     if (this.betValue === 1) {
       this.tryRule = `Quel courage ! Vous avez parié que vous réussirez à trouver le Nombre Mystère en 1 tentative !`;
-    }
-    if (this.betValue != null && this.betValue != 1) {
+    } else if (
+      this.betValue != null &&
+      this.betValue != 1 &&
+      this.leftTries != null
+    ) {
+      this.tryRule = `Vous aviez parié que vous trouverez le Nombre Mystère en <span class="important">${this.betValue}</span> tentatives !
+      <br/>Il vous en reste <span class="important">${this.leftTries}</span>.`;
+    } else if (
+      this.betValue != null &&
+      this.betValue != 1 &&
+      this.leftTries === null
+    ) {
       this.tryRule = `Vous avez parié que vous trouverez le Nombre Mystère en <span class="important">${this.betValue}</span> tentatives !`;
     }
   };
@@ -91,11 +110,13 @@ export class NmGameComponent implements OnInit {
     this.result = '';
     this.numberOfTriesLeft = '';
     this.tryText = '';
-    this.tryRule = '';
+    if (this.harderPlease != null) {
+      this.tryRule = `Vous avez de nouveau droit à <span class="important">${this.betValue}</span> tentatives. <br/>Pour modifier ce nombre, vous pouvez retourner à l\'étape 2 !`;
+    }
     if (this.reset === 'Nouvelle partie') {
       this.reset = 'Réinitialiser le jeu';
     }
-    this.harderPlease = this.datas[0].value;
+    this.harderPlease = null;
     this.isBasicDisabled = false;
     this.isResetDisabled = true;
     this.isCheckDisabled = false;
@@ -136,6 +157,8 @@ export class NmGameComponent implements OnInit {
         number: `${this.number.value}`,
         status: `${this.status}`,
       });
+      console.log(this.attempts);
+      //TODO: stocker ça dans le LS pour récupérer les données quand on revient sur l'étape 3
     }
     if (this.harderPlease === true) {
       // Activation du mode "nombre de tentative limité"
@@ -148,7 +171,13 @@ export class NmGameComponent implements OnInit {
             'Perdu ! Le nombre de tentatives autorisé a été dépassé.';
         } else {
           this.leftTries = this.betValue - this.count;
-          this.numberOfTriesLeft = `Sur les <span class="important">${this.betValue}</span> tentatives prévues, il en reste <span class="important">${this.leftTries}</span>.`;
+          this.numberOfTriesLeft = `Il vous reste <span class="important">${this.leftTries}</span> tentatives sur les <span class="important">${this.betValue}</span> prévues.`;
+          const betDatas = [
+            { name: 'betIsChecked', value: this.harderPlease },
+            { name: 'betValue', value: this.betValue },
+            { name: 'leftTries', value: this.leftTries },
+          ];
+          localStorage.setItem('storedDatas', JSON.stringify(betDatas));
         }
       } else {
         this.leftTries = this.betValue - this.count;
@@ -161,6 +190,7 @@ export class NmGameComponent implements OnInit {
     this.tries = new FormControl(1);
     console.log(`Le nombre aléatoire est : ${this.random}`);
     this.checkIfBet();
+    console.log(this.leftTries);
   }
 }
 //TODO: Faire que le bouton réinitialiser le jeu réinitialise également le pari et redirige vers Etape 1

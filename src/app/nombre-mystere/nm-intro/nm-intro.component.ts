@@ -18,8 +18,8 @@ export class NmIntroComponent implements OnInit {
     const betDatas = [
       { name: 'betIsChecked', value: false },
       { name: 'betValue', value: null },
+      { name: 'leftTries', value: null },
     ];
     localStorage.setItem('storedDatas', JSON.stringify(betDatas));
-    console.log(betDatas);
   }
 }

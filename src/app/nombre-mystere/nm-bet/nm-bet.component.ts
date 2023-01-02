@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { FormControl } from '@angular/forms';
 
@@ -7,15 +7,41 @@ import { FormControl } from '@angular/forms';
   templateUrl: './nm-bet.component.html',
   styleUrls: ['./nm-bet.component.scss'],
 })
+// export class NmBetComponent implements OnInit {
 export class NmBetComponent {
   tries = new FormControl(1);
 
   tryText = '';
 
+  betDatas = [];
+  storage = localStorage.getItem('storedDatas');
+  datas = JSON.parse(
+    this.storage != null ? this.storage : JSON.stringify(this.betDatas)
+  );
+  betValue = this.datas[1].value;
+  leftTries = this.datas[2].value;
+
   isCheckDisabled = false;
   harderPlease = false;
   isTriesDisabled = false;
   isResetDisabled = true;
+
+  checkBetValue = () => {
+    if (this.betValue != null && this.leftTries < 1) {
+      this.harderPlease = true;
+      if (this.betValue === 1) {
+        this.tryText = `Pour rappel, vous aviez eu le courage de parier sur <span class="important">1</span> tentative !`;
+      } else {
+        this.tryText = `Pour rappel, vous aviez parié sur <span class="important">${this.betValue}</span> tentatives.`;
+      }
+    } else if (this.betValue != null && this.leftTries > 1) {
+      this.harderPlease = true;
+      this.isTriesDisabled = true;
+      this.isCheckDisabled = true;
+      this.tryText = `<br/>Il vous reste encore <span class="important">${this.leftTries}</span> tentative(s) pour gagner votre pari !
+      <br>Si vous souhaitez abandonner la partie en cours, il vous suffit de cliquer sur le bouton "Réinitialiser le jeu", disponible à l'étape 3.`;
+    }
+  };
 
   betFunction = () => {
     this.tryText = '';
@@ -31,6 +57,7 @@ export class NmBetComponent {
       const betDatas = [
         { name: 'betIsChecked', value: this.harderPlease },
         { name: 'betValue', value: this.tries.value },
+        { name: 'leftTries', value: null },
       ];
       localStorage.setItem('storedDatas', JSON.stringify(betDatas));
     }
@@ -43,4 +70,8 @@ export class NmBetComponent {
     this.isTriesDisabled = false;
     this.isResetDisabled = true;
   };
+
+  ngOnInit(): void {
+    this.checkBetValue();
+  }
 }
