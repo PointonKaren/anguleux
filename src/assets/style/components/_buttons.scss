@@ -1,17 +1,16 @@
-//* Charte graphique
-$one: #202232;
-$two: #adacb5;
-$three: #d8d5db;
-$four: #eae8ff;
-$five: #d1c0ff;
-$six: #b798ff;
-$seven: #9770fa;
-$height: #363d46;
+@import "../utils/variables";
 
-//* Style global
-$body: $one;
-$text: $three;
-$h1: $seven;
-$h2: $six;
-$h3: $five;
-$important: $seven;
+button,
+input {
+  border: 1px solid $important;
+  text-align: center;
+  background-color: $two;
+  color: $one;
+  cursor: pointer;
+}
+
+.disableClass {
+  color: $two;
+  background-color: $three;
+  cursor: default;
+}
