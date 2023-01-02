@@ -28,6 +28,11 @@ export class NmBetComponent {
       this.isTriesDisabled = true;
       this.isResetDisabled = false;
       this.tryText = ` C'est tout bon, il faudra donc trouver le Nombre Mystère en moins de <span class="important">${this.tries.value}</span> tentatives !`;
+      const betDatas = [
+        { name: 'betIsChecked', value: this.harderPlease },
+        { name: 'betValue', value: this.tries.value },
+      ];
+      localStorage.setItem('storedDatas', JSON.stringify(betDatas));
     }
   };
 
