@@ -24,19 +24,6 @@ export class NmGameComponent implements OnInit {
   numberOfTriesLeft = '';
   reset = 'Réinitialiser le jeu';
 
-  betDatas = [];
-  storage = localStorage.getItem('storedDatas');
-  datas = JSON.parse(
-    this.storage != null ? this.storage : JSON.stringify(this.betDatas)
-  );
-
-  attemptsArray = [];
-  attemptsStorage = localStorage.getItem('attempts');
-
-  harderPlease = this.datas[0].value;
-  betValue = this.datas[1].value;
-  leftTries = this.datas[2].value;
-
   isCheckDisabled = false;
   isResetDisabled = true;
   isTriesDisabled = true;
@@ -47,6 +34,18 @@ export class NmGameComponent implements OnInit {
   resetButtonVisible = false;
 
   attempts = new Array();
+  attemptsArray = [];
+  attemptsStorage = localStorage.getItem('attempts');
+
+  betDatas = [];
+  storage = localStorage.getItem('storedDatas');
+  datas = JSON.parse(
+    this.storage != null ? this.storage : JSON.stringify(this.betDatas)
+  );
+
+  betIsChecked = this.datas[0].value;
+  betValue = this.datas[1].value;
+  leftTries = this.datas[2].value;
 
   /**
    * Fonction qui vérifie dans le LS si un nombre n'a pas déjà été généré
@@ -94,6 +93,11 @@ export class NmGameComponent implements OnInit {
     }
   };
 
+  /**
+   * Fonction qui vérifie que les données du formulaire :
+   * - sont bien des valeurs entre 0 et 100
+   * - n'ont pas déjà été testées
+   */
   checkDatas = () => {
     this.result = '';
 
@@ -128,20 +132,21 @@ export class NmGameComponent implements OnInit {
     }
   };
 
+  /**
+   * Fonction qui réinitialise le jeu
+   */
   resetFunction = () => {
-    this.random = Math.floor(Math.random() * (this.max - this.min)) + this.min;
+    this.random = -1;
     this.count = 0;
-    this.number = new FormControl(0);
-    this.tries = new FormControl(1);
+
     this.result = '';
     this.numberOfTriesLeft = '';
     this.tryText = '';
-
     if (this.reset === 'Nouvelle partie') {
       this.reset = 'Réinitialiser le jeu';
     }
 
-    this.harderPlease = false;
+    this.betIsChecked = false;
     this.isBasicDisabled = false;
     this.isResetDisabled = true;
     this.isCheckDisabled = false;
@@ -161,16 +166,29 @@ export class NmGameComponent implements OnInit {
     localStorage.setItem('storedDatas', JSON.stringify(betDatas));
   };
 
+  /**
+   * Fonction qui récupère les données du tableau de résultats
+   * (Utile en cas de rechargement de l'étape 3 par l'utilisateur)
+   */
+
+  getResultsFromLS = () => {
+    if (this.attemptsStorage != null) {
+      console.log(JSON.parse(this.attemptsStorage));
+      this.attempts = JSON.parse(this.attemptsStorage);
+      console.log(this.attempts);
+      this.gameResults = true;
+    }
+  };
+
+  /**
+   * Fonction principale
+   */
   gameFunction = () => {
     this.isCheckDisabled = true;
     this.isResetDisabled = false;
     this.tryRule = '';
     this.resetButtonVisible = true;
-    if (this.attemptsStorage === null) {
-      console.log('bloup');
-    } else {
-      console.log(JSON.parse(this.attemptsStorage));
-    }
+
     if (this.number.value === null) {
       this.result = 'Veuillez écrire un nombre dans le formulaire.';
     } else {
@@ -209,7 +227,7 @@ export class NmGameComponent implements OnInit {
       localStorage.setItem('attempts', JSON.stringify(this.attempts));
       //TODO: stocker ça dans le LS pour récupérer les données quand on revient sur l'étape 3
     }
-    if (this.harderPlease === true) {
+    if (this.betIsChecked === true) {
       // Activation du mode "nombre de tentative limité"
       this.tryText = '';
       if (this.betValue === null) {
@@ -226,7 +244,7 @@ export class NmGameComponent implements OnInit {
             this.numberOfTriesLeft = `Il vous reste <span class="important">${this.leftTries}</span> tentatives sur les <span class="important">${this.betValue}</span> prévues.`;
           }
           const betDatas = [
-            { name: 'betIsChecked', value: this.harderPlease },
+            { name: 'betIsChecked', value: this.betIsChecked },
             { name: 'betValue', value: this.betValue },
             { name: 'leftTries', value: this.leftTries },
           ];
@@ -243,6 +261,7 @@ export class NmGameComponent implements OnInit {
     this.tries = new FormControl(1);
     this.checkIfBet();
     this.randomizeNumber();
+    this.getResultsFromLS();
     console.log(`Le nombre aléatoire est : ${this.random}`);
   }
 }
