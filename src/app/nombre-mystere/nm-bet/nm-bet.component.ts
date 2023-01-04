@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 
 import { FormControl } from '@angular/forms';
 
+//TODO: ajouter la gestion du pari si le NM a été trouvé !
+//TODO: betText + checkbox visibles au retour sur l'étape 2 si aucune tentative sur étape 3 malgré pari
+
 @Component({
   selector: 'app-nm-bet',
   templateUrl: './nm-bet.component.html',
