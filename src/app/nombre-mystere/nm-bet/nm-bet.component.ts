@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { FormControl } from '@angular/forms';
 
@@ -7,10 +7,10 @@ import { FormControl } from '@angular/forms';
   templateUrl: './nm-bet.component.html',
   styleUrls: ['./nm-bet.component.scss'],
 })
-// export class NmBetComponent implements OnInit {
 export class NmBetComponent {
   tries = new FormControl(1);
 
+  betText = 'Cliquez ici pour lancer un pari !';
   tryText = '';
 
   betDatas = [];
@@ -21,6 +21,7 @@ export class NmBetComponent {
   betValue = this.datas[1].value;
   leftTries = this.datas[2].value;
 
+  betCheckVisible = true;
   isCheckDisabled = false;
   harderPlease = false;
   isTriesDisabled = false;
@@ -61,7 +62,9 @@ export class NmBetComponent {
     } else {
       this.isTriesDisabled = true;
       this.isResetDisabled = false;
+      this.betInputVisible = false;
       this.betDone = true;
+      this.betCheckVisible = false;
       this.tryText = `C'est noté, il faudra donc trouver le Nombre Mystère en moins de <span class="important">${this.tries.value}</span> tentative(s) !
       <br/>Vous pouvez désormais passer à l'étape 3 !`;
       const betDatas = [
@@ -73,13 +76,22 @@ export class NmBetComponent {
     }
   };
 
-  resetFunction = () => {
+  changeBet = () => {
     this.tries = new FormControl(1);
     this.tryText = '';
+    this.betCheckVisible = true;
+    this.betText = 'Décocher pour annuler le pari :';
     this.isCheckDisabled = false;
     this.isTriesDisabled = false;
     this.isResetDisabled = true;
+    this.betInputVisible = true;
     this.betDone = false;
+    const betDatas = [
+      { name: 'betIsChecked', value: false },
+      { name: 'betValue', value: null },
+      { name: 'leftTries', value: null },
+    ];
+    localStorage.setItem('storedDatas', JSON.stringify(betDatas));
   };
 
   ngOnInit(): void {
