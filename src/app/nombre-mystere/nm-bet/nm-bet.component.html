@@ -15,7 +15,7 @@
 </p>
 
 <div *ngIf="harderPlease">
-  <p>
+  <p *ngIf="betInputVisible">
     Choisir un nombre entre 1 et 99 :
     <input
       type="number"
@@ -34,9 +34,9 @@
     >
       Envoyer
     </button>
-    <span [innerHTML]="tryText"></span>
   </p>
-  <p class="resetButton">
+  <p [innerHTML]="tryText"></p>
+  <p *ngIf="betDone" class="resetButton">
     <button
       (click)="resetFunction()"
       [disabled]="isResetDisabled"
@@ -46,7 +46,3 @@
     </button>
   </p>
 </div>
-<p>
-  <span class="important">NB:</span> La possibilité de pouvoir générer un nombre
-  de tentatives aléatoire est en cours de développement.
-</p>

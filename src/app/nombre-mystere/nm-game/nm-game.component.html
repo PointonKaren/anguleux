@@ -1,4 +1,4 @@
-<h2>Etape 3 : à vous marques... prêts... jouez !</h2>
+<h2>Etape 3 : à vos marques... prêts... jouez !</h2>
 <div class="game">
   <div class="game--form">
     <p [innerHTML]="tryRule"></p>
@@ -23,18 +23,15 @@
         Envoyer
       </button>
     </div>
-  </div>
-  <div class="game--results">
     <p [innerHTML]="result"></p>
     <p [innerHTML]="numberOfTriesLeft"></p>
+  </div>
+  <div *ngIf="gameResults" class="game--results">
     <tbody class="game--results--table">
       <tr>
         <th>Essai n°</th>
         <th>Nombre tenté</th>
-        <th>
-          <span class="important">🡹</span>, <span class="important">🡻</span> ou
-          <span class="important">✔</span>
-        </th>
+        <th>Résultat</th>
       </tr>
       <tr *ngFor="let attempt of attempts">
         <td>{{ attempt.count }}</td>
@@ -44,6 +41,16 @@
         <td [innerHTML]="attempt.status"></td>
       </tr>
     </tbody>
+    <p *ngIf="legendIsHere">
+      Légende :
+      <br /><span class="important status">🡹</span> : Le Nombre Mystère est plus
+      <span class="important">grand</span> que le nombre tenté. <br /><span
+        class="important status"
+        >🡻</span
+      >
+      : Le Nombre Mystère est plus <span class="important">petit</span> que le
+      nombre tenté.
+    </p>
   </div>
 </div>
 <p class="resetButton">
