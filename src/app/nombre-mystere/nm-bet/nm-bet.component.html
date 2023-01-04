@@ -3,8 +3,8 @@
   Cette section permet de prédire le nombre de tentatives nécessaires pour
   deviner le Nombre Mystère.
 </h3>
-<p>
-  Cocher cette case pour activer le mode "Pari" du jeu :
+<p *ngIf="betCheckVisible">
+  <span [innerHTML]="betText"></span>
   <input
     type="checkbox"
     id="harderPleaseCheckbox"
@@ -15,7 +15,7 @@
 </p>
 
 <div *ngIf="harderPlease">
-  <p>
+  <p *ngIf="betInputVisible">
     Choisir un nombre entre 1 et 99 :
     <input
       type="number"
@@ -34,19 +34,18 @@
     >
       Envoyer
     </button>
-    <span [innerHTML]="tryText"></span>
   </p>
-  <p class="resetButton">
+  <p [innerHTML]="tryText"></p>
+  <span *ngIf="betDone" class="resetButton">
     <button
-      (click)="resetFunction()"
+      (click)="changeBet()"
       [disabled]="isResetDisabled"
       [ngClass]="{ disableClass: isResetDisabled }"
     >
-      Changer mon pari
+      Annuler ou changer mon pari
     </button>
-  </p>
+  </span>
 </div>
-<p>
-  <span class="important">NB:</span> La possibilité de pouvoir générer un nombre
-  de tentatives aléatoire est en cours de développement.
-</p>
+<div *ngIf="resetIsVisible" class="resetButton">
+  <button (click)="resetFunction()">Réinitialiser le jeu</button>
+</div>
