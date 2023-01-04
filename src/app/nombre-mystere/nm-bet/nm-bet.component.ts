@@ -28,6 +28,7 @@ export class NmBetComponent {
   isResetDisabled = true;
   betInputVisible = true;
   betDone = false;
+  resetIsVisible = false;
 
   checkBetValue = () => {
     if (this.betValue != null && this.leftTries < 1) {
@@ -41,14 +42,16 @@ export class NmBetComponent {
         this.tryText = `Pour rappel, vous aviez parié sur <span class="important">${this.betValue}</span> tentatives.
         <br>Si vous souhaitez abandonner la partie en cours, il vous suffit de cliquer sur le bouton "Réinitialiser le jeu", disponible à l'étape 3.`;
       }
-    } else if (this.betValue != null && this.leftTries > 1) {
+    } else if (this.betValue != null && this.leftTries >= 1) {
       this.harderPlease = true;
       this.isTriesDisabled = true;
+      this.betCheckVisible = false;
       this.isCheckDisabled = true;
       this.betInputVisible = false;
+      this.resetIsVisible = true;
       this.betDone = false;
       this.tryText = `Il vous reste encore <span class="important">${this.leftTries}</span> tentative(s) pour gagner votre pari !
-      <br>Si vous souhaitez abandonner la partie en cours, il vous suffit de cliquer sur le bouton "Réinitialiser le jeu", disponible à l'étape 3.`;
+      <br>Si vous souhaitez abandonner la partie en cours, il vous suffit de cliquer sur le bouton "Réinitialiser le jeu"`;
     }
   };
 
@@ -86,6 +89,28 @@ export class NmBetComponent {
     this.isResetDisabled = true;
     this.betInputVisible = true;
     this.betDone = false;
+    const betDatas = [
+      { name: 'betIsChecked', value: false },
+      { name: 'betValue', value: null },
+      { name: 'leftTries', value: null },
+    ];
+    localStorage.setItem('storedDatas', JSON.stringify(betDatas));
+  };
+
+  resetFunction = () => {
+    this.betCheckVisible = true;
+    this.isCheckDisabled = false;
+    this.harderPlease = false;
+    this.isTriesDisabled = false;
+    this.isResetDisabled = true;
+    this.betInputVisible = true;
+    this.betDone = false;
+    this.resetIsVisible = true;
+    this.resetIsVisible = false;
+
+    this.tryText = '';
+
+    localStorage.clear();
     const betDatas = [
       { name: 'betIsChecked', value: false },
       { name: 'betValue', value: null },

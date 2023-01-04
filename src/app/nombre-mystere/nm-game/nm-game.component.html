@@ -11,12 +11,12 @@
         [formControl]="number"
         min="0"
         max="100"
-        (keyup.enter)="isBasicDisabled ? 'true' : checkThenRandom()"
+        (keyup.enter)="isBasicDisabled ? 'true' : checkDatas()"
         [ngClass]="{ disableClass: isBasicDisabled }"
       />
       <button
         type="button"
-        (click)="checkThenRandom()"
+        (click)="checkDatas()"
         [disabled]="isBasicDisabled"
         [ngClass]="{ disableClass: isBasicDisabled }"
       >
@@ -53,11 +53,11 @@
     </p>
   </div>
 </div>
-<p class="resetButton">
+<div *ngIf="resetButtonVisible" class="resetButton">
   <button
     (click)="resetFunction()"
     [innerHTML]="reset"
     [disabled]="isResetDisabled"
     [ngClass]="{ disableClass: isResetDisabled }"
   ></button>
-</p>
+</div>

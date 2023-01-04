@@ -14,8 +14,8 @@ export class NmGameComponent implements OnInit {
   constructor() {}
   min = 0;
   max = 100;
-  random = Math.floor(Math.random() * (this.max - this.min)) + this.min;
   count = 0;
+  random = -1;
 
   result = '';
   status = '';
@@ -44,9 +44,31 @@ export class NmGameComponent implements OnInit {
   sameNumber = false;
   gameResults = false;
   legendIsHere = false;
+  resetButtonVisible = false;
 
   attempts = new Array();
 
+  /**
+   * Fonction qui vérifie dans le LS si un nombre n'a pas déjà été généré
+   * et génère un nombre aléatoire le cas échéant.
+   * (Utile en cas de rechargement de l'étape 3 par l'utilisateur)
+   */
+  randomizeNumber = () => {
+    const storageNumber = localStorage.getItem('mysteryNumber');
+    if (storageNumber != null) {
+      this.random = parseInt(storageNumber);
+    } else if (this.random === -1) {
+      this.random =
+        Math.floor(Math.random() * (this.max - this.min)) + this.min;
+      localStorage.setItem('mysteryNumber', JSON.stringify(this.random));
+    } else {
+      console.log(this.random);
+    }
+  };
+
+  /**
+   * Fonction qui vérifie si un pari a été lancé dans l'étape 2
+   */
   checkIfBet = () => {
     if (this.betValue === 1) {
       this.tryRule = `Quel courage ! Vous avez parié que vous réussirez à trouver le Nombre Mystère en 1 tentative !`;
@@ -69,13 +91,12 @@ export class NmGameComponent implements OnInit {
       this.leftTries === null
     ) {
       this.tryRule = `Vous avez parié que vous trouverez le Nombre Mystère en <span class="important">${this.betValue}</span> tentatives !`;
-    } else {
-      console.log(this.attempts);
     }
   };
 
-  checkThenRandom = () => {
+  checkDatas = () => {
     this.result = '';
+
     if (this.number.value === null) {
       this.result = 'Veuillez écrire un nombre dans le formulaire.';
     } else if (this.number.value > 100 || this.number.value < 0) {
@@ -98,11 +119,11 @@ export class NmGameComponent implements OnInit {
           this.result = `<span class="important">${this.number.value}</span> a déjà été testé, veuillez proposer un autre nombre SVP.`;
         } else {
           // Nombres différents
-          this.randomFunction();
+          this.gameFunction();
         }
       } else {
         // Tableau vide
-        this.randomFunction();
+        this.gameFunction();
       }
     }
   };
@@ -115,28 +136,36 @@ export class NmGameComponent implements OnInit {
     this.result = '';
     this.numberOfTriesLeft = '';
     this.tryText = '';
-    if (this.harderPlease) {
-      this.tryRule = `Vous avez de nouveau droit à <span class="important">${this.betValue}</span> tentatives. <br/>Pour modifier ce nombre, vous pouvez retourner à l\'étape 2 !`;
-    } else {
-      this.tryRule = `N'hésitez pas à passer l'étape 2 pour parier sur le nombre de tentatives nécessaires !`;
-    }
+
     if (this.reset === 'Nouvelle partie') {
       this.reset = 'Réinitialiser le jeu';
     }
-    this.harderPlease = null;
+
+    this.harderPlease = false;
     this.isBasicDisabled = false;
     this.isResetDisabled = true;
     this.isCheckDisabled = false;
     this.isTriesDisabled = true;
     this.gameResults = false;
     this.legendIsHere = false;
+    this.resetButtonVisible = false;
+
     this.attempts = new Array();
+
+    localStorage.clear();
+    const betDatas = [
+      { name: 'betIsChecked', value: false },
+      { name: 'betValue', value: null },
+      { name: 'leftTries', value: null },
+    ];
+    localStorage.setItem('storedDatas', JSON.stringify(betDatas));
   };
 
-  randomFunction = () => {
+  gameFunction = () => {
     this.isCheckDisabled = true;
     this.isResetDisabled = false;
     this.tryRule = '';
+    this.resetButtonVisible = true;
     if (this.attemptsStorage === null) {
       console.log('bloup');
     } else {
@@ -176,7 +205,7 @@ export class NmGameComponent implements OnInit {
         number: `${this.number.value}`,
         status: `${this.status}`,
       });
-      console.log(this.attempts);
+
       localStorage.setItem('attempts', JSON.stringify(this.attempts));
       //TODO: stocker ça dans le LS pour récupérer les données quand on revient sur l'étape 3
     }
@@ -212,14 +241,9 @@ export class NmGameComponent implements OnInit {
 
   ngOnInit(): void {
     this.tries = new FormControl(1);
-    console.log(`Le nombre aléatoire est : ${this.random}`);
     this.checkIfBet();
-    console.log(this.leftTries);
-    if (this.attemptsStorage === null) {
-      console.log('bloup');
-    } else {
-      console.log(JSON.parse(this.attemptsStorage));
-    }
+    this.randomizeNumber();
+    console.log(`Le nombre aléatoire est : ${this.random}`);
   }
 }
 //TODO: Faire que le bouton réinitialiser le jeu réinitialise également le pari et redirige vers Etape 1

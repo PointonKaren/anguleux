@@ -36,7 +36,7 @@
     </button>
   </p>
   <p [innerHTML]="tryText"></p>
-  <p *ngIf="betDone" class="resetButton">
+  <span *ngIf="betDone" class="resetButton">
     <button
       (click)="changeBet()"
       [disabled]="isResetDisabled"
@@ -44,5 +44,8 @@
     >
       Annuler ou changer mon pari
     </button>
-  </p>
+  </span>
+</div>
+<div *ngIf="resetIsVisible" class="resetButton">
+  <button (click)="resetFunction()">Réinitialiser le jeu</button>
 </div>
