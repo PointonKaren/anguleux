@@ -19,14 +19,11 @@ export class NmGameComponent implements OnInit {
 
   result = '';
   status = '';
-  tryText = '';
   tryRule = 'À vos propositions !';
   numberOfTriesLeft = '';
   reset = 'Réinitialiser le jeu';
 
-  isCheckDisabled = false;
   isResetDisabled = true;
-  isTriesDisabled = true;
   isWon = false;
   sameNumber = false;
   gameResults = false;
@@ -141,16 +138,11 @@ export class NmGameComponent implements OnInit {
 
     this.result = '';
     this.numberOfTriesLeft = '';
-    this.tryText = '';
     if (this.reset === 'Nouvelle partie') {
       this.reset = 'Réinitialiser le jeu';
     }
-
     this.betIsChecked = false;
     this.isBasicDisabled = false;
-    this.isResetDisabled = true;
-    this.isCheckDisabled = false;
-    this.isTriesDisabled = true;
     this.gameResults = false;
     this.legendIsHere = false;
     this.resetButtonVisible = false;
@@ -170,7 +162,6 @@ export class NmGameComponent implements OnInit {
    * Fonction qui récupère les données du tableau de résultats
    * (Utile en cas de rechargement de l'étape 3 par l'utilisateur)
    */
-
   getResultsFromLS = () => {
     if (this.attemptsStorage != null) {
       console.log(JSON.parse(this.attemptsStorage));
@@ -181,67 +172,75 @@ export class NmGameComponent implements OnInit {
   };
 
   /**
-   * Fonction principale
+   * Si essai < nombre mystère
    */
-  gameFunction = () => {
-    this.isCheckDisabled = true;
-    this.isResetDisabled = false;
-    this.tryRule = '';
-    this.resetButtonVisible = true;
+  valueInfRandom = () => {
+    this.legendIsHere = true;
+    this.result = `Essai n°${this.count} : <span class="important">${this.number.value}</span> est plus <span class="important">petit</span> que le nombre à deviner.`;
+    this.status = `<span class="important status">🡹</span>`;
+  };
 
-    if (this.number.value === null) {
-      this.result = 'Veuillez écrire un nombre dans le formulaire.';
-    } else {
-      this.count += 1;
-      this.gameResults = true;
-      console.log(`Nombre de tentatives : ${this.count}`);
-      if (this.number.value < this.random) {
-        this.legendIsHere = true;
-        this.result = `Essai n°${this.count} : <span class="important">${this.number.value}</span> est plus <span class="important">petit</span> que le nombre à deviner.`;
-        this.status = `<span class="important status">🡹</span>`;
-      } else if (this.number.value > this.random) {
-        this.legendIsHere = true;
-        this.result = `Essai n°${this.count} : <span class="important">${this.number.value}</span> est plus <span class="important">grand</span> que le chiffre à deviner.`;
-        this.status = `<span class="important status">🡻</span>`;
-      } else if (this.number.value === this.random && this.random != 42) {
-        this.result = `Bravo ! Le nombre à deviner, <span class="important">${this.random}</span>, a été trouvé en ${this.count} tentatives !`;
-        this.status = `<span class="important status">✔</span>`;
-        this.reset = 'Nouvelle partie';
-        this.isBasicDisabled = true;
-        this.isWon = true;
-        this.legendIsHere = false;
-      } else if (this.random === 42 && this.number.value === 42) {
-        this.result = `Hééééééé oui, 42 est encore une fois LA réponse ! <br/>Nombre d'essais : ${this.count}`;
-        this.reset = 'Nouvelle partie';
-        this.status = `<span class="important status">✔</span>`;
-        this.isBasicDisabled = true;
-        this.isWon = true;
-        this.legendIsHere = false;
-      }
-      this.attempts.push({
-        count: `${this.count}`,
-        number: `${this.number.value}`,
-        status: `${this.status}`,
-      });
+  /**
+   * Si essai > nombre mystère
+   */
+  valueSupRandom = () => {
+    this.legendIsHere = true;
+    this.result = `Essai n°${this.count} : <span class="important">${this.number.value}</span> est plus <span class="important">grand</span> que le chiffre à deviner.`;
+    this.status = `<span class="important status">🡻</span>`;
+  };
 
-      localStorage.setItem('attempts', JSON.stringify(this.attempts));
-      //TODO: stocker ça dans le LS pour récupérer les données quand on revient sur l'étape 3
-    }
+  /**
+   * Booléens à modifier en cas de victoire
+   */
+  winBooleans = () => {
+    this.isBasicDisabled = true;
+    this.isWon = true;
+    this.legendIsHere = false;
+  };
+
+  /**
+   * Si réussite mais nombre mystère n'est pas 42
+   */
+  winButNot42 = () => {
+    this.result = `Bravo ! Le nombre à deviner, <span class="important">${this.random}</span>, a été trouvé en ${this.count} tentative(s) !`;
+    this.status = `<span class="important status">✔</span>`;
+    this.reset = 'Nouvelle partie';
+    this.winBooleans();
+  };
+
+  /**
+   * Si réussite et nombre mystère = 42
+   */
+  perfectWin = () => {
+    this.result = `Hééééééé oui, 42 est encore une fois LA réponse ! <br/>Nombre d'essais : ${this.count}`;
+    this.reset = 'Nouvelle partie';
+    this.status = `<span class="important status">✔</span>`;
+    this.winBooleans();
+  };
+
+  /**
+   * Fonction qui active le mode "Pari"
+   */
+  betMode = () => {
     if (this.betIsChecked === true) {
-      // Activation du mode "nombre de tentative limité"
-      this.tryText = '';
-      if (this.betValue === null) {
-        this.tryText = "Veuillez définir un nombre de tentative dans l'étape 2";
-      } else if (this.isWon != true) {
+      if (this.isWon != true) {
         if (this.count >= this.betValue) {
-          this.numberOfTriesLeft =
-            'Perdu ! Le nombre de tentatives autorisé a été dépassé.';
+          this.numberOfTriesLeft = `Perdu ! Le nombre de tentatives parié a été atteint.
+            <br/>Le Nombre Mystère était <span class="important">${this.random}</span>.`;
+          this.legendIsHere = false;
+          this.isBasicDisabled = true;
+          this.result = '';
         } else {
           this.leftTries = this.betValue - this.count;
+          console.log(this.leftTries, this.betValue, this.count);
+
           if (this.leftTries === 1) {
-            this.numberOfTriesLeft = `Il vous reste <span class="important">1</span> tentative !`;
-          } else {
+            this.numberOfTriesLeft = `<span class="important">Attention !</span> Il ne vous reste qu'<span class="important">1</span> tentative !`;
+          } else if (this.leftTries != 1) {
             this.numberOfTriesLeft = `Il vous reste <span class="important">${this.leftTries}</span> tentatives sur les <span class="important">${this.betValue}</span> prévues.`;
+          } else {
+            this.numberOfTriesLeft =
+              'Un problème est survenu, veuillez réinitialiser le jeu svp.';
           }
           const betDatas = [
             { name: 'betIsChecked', value: this.betIsChecked },
@@ -252,9 +251,41 @@ export class NmGameComponent implements OnInit {
         }
       } else {
         this.leftTries = this.betValue - this.count;
-        this.numberOfTriesLeft = `Sur les <span class="important">${this.betValue}</span> tentatives prévues, il en restait <span class="important">${this.leftTries}</span> !`;
+        this.numberOfTriesLeft = `Sur les <span class="important">${this.betValue}</span> tentatives pariées, il en restait <span class="important">${this.leftTries}</span> !`;
       }
     }
+  };
+
+  /**
+   * Fonction principale
+   */
+  gameFunction = () => {
+    this.tryRule = '';
+    this.resetButtonVisible = true;
+
+    if (this.number.value === null) {
+      this.result = 'Veuillez écrire un nombre dans le formulaire.';
+    } else {
+      this.count += 1;
+      this.gameResults = true;
+      console.log(`Nombre de tentatives : ${this.count}`);
+      if (this.number.value < this.random) {
+        this.valueInfRandom();
+      } else if (this.number.value > this.random) {
+        this.valueSupRandom();
+      } else if (this.number.value === this.random && this.random != 42) {
+        this.winButNot42();
+      } else if (this.random === 42 && this.number.value === 42) {
+        this.perfectWin();
+      }
+      this.attempts.push({
+        count: `${this.count}`,
+        number: `${this.number.value}`,
+        status: `${this.status}`,
+      });
+      localStorage.setItem('attempts', JSON.stringify(this.attempts));
+    }
+    this.betMode();
   };
 
   ngOnInit(): void {

@@ -54,10 +54,5 @@
   </div>
 </div>
 <div *ngIf="resetButtonVisible" class="resetButton">
-  <button
-    (click)="resetFunction()"
-    [innerHTML]="reset"
-    [disabled]="isResetDisabled"
-    [ngClass]="{ disableClass: isResetDisabled }"
-  ></button>
+  <button (click)="resetFunction()" [innerHTML]="reset"></button>
 </div>
