@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
+//TODO: Quand le jeu est gagné, réinitialiser la liste des tentatives. (isWon non pris en compte si retour sur étape 2 après réussite)
+
 @Component({
   selector: 'app-nm-game',
   templateUrl: './nm-game.component.html',
@@ -187,6 +189,7 @@ export class NmGameComponent implements OnInit {
     this.isBasicDisabled = true;
     this.isWon = true;
     this.legendIsHere = false;
+    this.storeBetInLS(this.betIsChecked, this.betValue, this.leftTries, true);
   };
 
   /**
