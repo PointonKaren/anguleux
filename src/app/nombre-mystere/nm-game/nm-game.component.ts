@@ -130,45 +130,36 @@ export class NmGameComponent implements OnInit {
   };
 
   /**
-   * Fonction qui réinitialise le jeu
-   */
-  resetFunction = () => {
-    this.random = -1;
-    this.count = 0;
-
-    this.result = '';
-    this.numberOfTriesLeft = '';
-    if (this.reset === 'Nouvelle partie') {
-      this.reset = 'Réinitialiser le jeu';
-    }
-    this.betIsChecked = false;
-    this.isBasicDisabled = false;
-    this.gameResults = false;
-    this.legendIsHere = false;
-    this.resetButtonVisible = false;
-
-    this.attempts = new Array();
-
-    localStorage.clear();
-    const betDatas = [
-      { name: 'betIsChecked', value: false },
-      { name: 'betValue', value: null },
-      { name: 'leftTries', value: null },
-    ];
-    localStorage.setItem('storedDatas', JSON.stringify(betDatas));
-  };
-
-  /**
    * Fonction qui récupère les données du tableau de résultats
    * (Utile en cas de rechargement de l'étape 3 par l'utilisateur)
    */
   getResultsFromLS = () => {
     if (this.attemptsStorage != null) {
-      console.log(JSON.parse(this.attemptsStorage));
       this.attempts = JSON.parse(this.attemptsStorage);
-      console.log(this.attempts);
       this.gameResults = true;
     }
+  };
+
+  /**
+   * Fonction qui stocke dans le local storage les données de pari + boolean réussite/échec du jeu
+   * @param betIsChecked :any
+   * @param betValue :any
+   * @param leftTries :any
+   * @param isWon :boolean
+   */
+  storeBetInLS = (
+    betIsChecked: any,
+    betValue: any,
+    leftTries: any,
+    isWon: boolean
+  ) => {
+    const betDatas = [
+      { name: 'betIsChecked', value: betIsChecked },
+      { name: 'betValue', value: betValue },
+      { name: 'leftTries', value: leftTries },
+      { name: 'isWon', value: isWon },
+    ];
+    localStorage.setItem('storedDatas', JSON.stringify(betDatas));
   };
 
   /**
@@ -242,16 +233,22 @@ export class NmGameComponent implements OnInit {
             this.numberOfTriesLeft =
               'Un problème est survenu, veuillez réinitialiser le jeu svp.';
           }
-          const betDatas = [
-            { name: 'betIsChecked', value: this.betIsChecked },
-            { name: 'betValue', value: this.betValue },
-            { name: 'leftTries', value: this.leftTries },
-          ];
-          localStorage.setItem('storedDatas', JSON.stringify(betDatas));
+          this.storeBetInLS(
+            this.betIsChecked,
+            this.betValue,
+            this.leftTries,
+            this.isWon
+          );
         }
       } else {
         this.leftTries = this.betValue - this.count;
         this.numberOfTriesLeft = `Sur les <span class="important">${this.betValue}</span> tentatives pariées, il en restait <span class="important">${this.leftTries}</span> !`;
+        this.storeBetInLS(
+          this.betIsChecked,
+          this.betValue,
+          this.leftTries,
+          this.isWon
+        );
       }
     }
   };
@@ -286,6 +283,30 @@ export class NmGameComponent implements OnInit {
       localStorage.setItem('attempts', JSON.stringify(this.attempts));
     }
     this.betMode();
+  };
+
+  /**
+   * Fonction qui réinitialise le jeu
+   */
+  resetFunction = () => {
+    this.random = -1;
+    this.count = 0;
+
+    this.result = '';
+    this.numberOfTriesLeft = '';
+    if (this.reset === 'Nouvelle partie') {
+      this.reset = 'Réinitialiser le jeu';
+    }
+    this.betIsChecked = false;
+    this.isBasicDisabled = false;
+    this.gameResults = false;
+    this.legendIsHere = false;
+    this.resetButtonVisible = false;
+
+    this.attempts = new Array();
+
+    localStorage.clear();
+    this.storeBetInLS(false, null, null, false);
   };
 
   ngOnInit(): void {

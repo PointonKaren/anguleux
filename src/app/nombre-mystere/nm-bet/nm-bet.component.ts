@@ -59,6 +59,28 @@ export class NmBetComponent {
     }
   };
 
+  /**
+   * Fonction qui stocke dans le local storage les données de pari + boolean réussite/échec du jeu
+   * @param betIsChecked :any
+   * @param betValue :any
+   * @param leftTries :any
+   * @param isWon :boolean
+   */
+  storeBetInLS = (
+    betIsChecked: any,
+    betValue: any,
+    leftTries: any,
+    isWon: boolean
+  ) => {
+    const betDatas = [
+      { name: 'betIsChecked', value: betIsChecked },
+      { name: 'betValue', value: betValue },
+      { name: 'leftTries', value: leftTries },
+      { name: 'isWon', value: isWon },
+    ];
+    localStorage.setItem('storedDatas', JSON.stringify(betDatas));
+  };
+
   betFunction = () => {
     this.tryText = '';
     if (this.tries.value === null) {
@@ -72,14 +94,11 @@ export class NmBetComponent {
       this.betInputVisible = false;
       this.betDone = true;
       this.betCheckVisible = false;
+
       this.tryText = `C'est noté, il faudra donc trouver le Nombre Mystère en moins de <span class="important">${this.tries.value}</span> tentative(s) !
       <br/>Vous pouvez désormais passer à l'étape 3 !`;
-      const betDatas = [
-        { name: 'betIsChecked', value: this.harderPlease },
-        { name: 'betValue', value: this.tries.value },
-        { name: 'leftTries', value: null },
-      ];
-      localStorage.setItem('storedDatas', JSON.stringify(betDatas));
+
+      this.storeBetInLS(this.harderPlease, this.tries.value, null, false);
     }
   };
 
@@ -93,12 +112,7 @@ export class NmBetComponent {
     this.isResetDisabled = true;
     this.betInputVisible = true;
     this.betDone = false;
-    const betDatas = [
-      { name: 'betIsChecked', value: false },
-      { name: 'betValue', value: null },
-      { name: 'leftTries', value: null },
-    ];
-    localStorage.setItem('storedDatas', JSON.stringify(betDatas));
+    this.storeBetInLS(false, null, null, false);
   };
 
   resetFunction = () => {
@@ -115,12 +129,7 @@ export class NmBetComponent {
     this.tryText = '';
 
     localStorage.clear();
-    const betDatas = [
-      { name: 'betIsChecked', value: false },
-      { name: 'betValue', value: null },
-      { name: 'leftTries', value: null },
-    ];
-    localStorage.setItem('storedDatas', JSON.stringify(betDatas));
+    this.storeBetInLS(false, null, null, false);
   };
 
   ngOnInit(): void {
