@@ -11,7 +11,6 @@ import { FormControl } from '@angular/forms';
 export class NmGameComponent implements OnInit {
   number = new FormControl(0);
   tries = new FormControl(0);
-  isBasicDisabled = false;
 
   constructor() {}
   min = 0;
@@ -25,11 +24,11 @@ export class NmGameComponent implements OnInit {
   numberOfTriesLeft = '';
   reset = 'Réinitialiser le jeu';
 
+  formIsVisible = true;
   isResetDisabled = true;
   isWon = false;
   sameNumber = false;
-  gameResults = false;
-  legendIsHere = false;
+  gameResultsIsVisible = false;
   resetButtonVisible = false;
 
   attempts = new Array();
@@ -135,7 +134,7 @@ export class NmGameComponent implements OnInit {
   getResultsFromLS = () => {
     if (this.attemptsStorage != null) {
       this.attempts = JSON.parse(this.attemptsStorage);
-      this.gameResults = true;
+      this.gameResultsIsVisible = true;
     }
   };
 
@@ -160,12 +159,26 @@ export class NmGameComponent implements OnInit {
     ];
     localStorage.setItem('storedDatas', JSON.stringify(betDatas));
   };
+  /**
+   *
+   * @param formIsVisible boolean (Formulaire visible ou non)
+   * @param gameResultsIsVisible boolean (Tableau de résultats visible ou non)
+   * @param resetButtonVisible (Bouton resetGame visible ou non)
+   */
+  changeBooleans = (
+    formIsVisible: boolean,
+    gameResultsIsVisible: boolean,
+    resetButtonVisible: boolean
+  ) => {
+    this.formIsVisible = formIsVisible;
+    this.gameResultsIsVisible = gameResultsIsVisible;
+    this.resetButtonVisible = resetButtonVisible;
+  };
 
   /**
    * Si essai < nombre mystère
    */
   valueInfRandom = () => {
-    this.legendIsHere = true;
     this.result = `Essai n°${this.count} : <span class="important">${this.number.value}</span> est plus <span class="important">petit</span> que le nombre à deviner.`;
     this.status = `<span class="important status">🡹</span>`;
   };
@@ -174,7 +187,6 @@ export class NmGameComponent implements OnInit {
    * Si essai > nombre mystère
    */
   valueSupRandom = () => {
-    this.legendIsHere = true;
     this.result = `Essai n°${this.count} : <span class="important">${this.number.value}</span> est plus <span class="important">grand</span> que le chiffre à deviner.`;
     this.status = `<span class="important status">🡻</span>`;
   };
@@ -183,9 +195,8 @@ export class NmGameComponent implements OnInit {
    * Booléens à modifier en cas de victoire
    */
   winBooleans = () => {
-    this.isBasicDisabled = true;
     this.isWon = true;
-    this.legendIsHere = false;
+    this.changeBooleans(false, true, true);
     this.storeBetInLS(this.betIsChecked, this.betValue, this.leftTries, true);
   };
 
@@ -199,6 +210,16 @@ export class NmGameComponent implements OnInit {
     this.winBooleans();
   };
 
+  /**
+   * Si échec (uniquement en cas de pari non réussi)
+   */
+  lose = () => {
+    this.storeBetInLS(true, this.betValue, 0, false);
+    this.changeBooleans(false, true, true);
+    this.numberOfTriesLeft = `Perdu ! Le nombre de tentatives parié a été atteint.
+  <br/>Le Nombre Mystère était <span class="important">${this.random}</span>.`;
+    this.result = '';
+  };
   /**
    * Si réussite et nombre mystère = 42
    */
@@ -216,16 +237,10 @@ export class NmGameComponent implements OnInit {
     if (this.betIsChecked === true) {
       if (this.isWon != true) {
         if (this.count >= this.betValue) {
-          this.numberOfTriesLeft = `Perdu ! Le nombre de tentatives parié a été atteint.
-            <br/>Le Nombre Mystère était <span class="important">${this.random}</span>.`;
-          this.storeBetInLS(true, this.betValue, 0, false);
-          this.legendIsHere = false;
-          this.isBasicDisabled = true;
-          this.result = '';
+          this.lose();
         } else {
           this.leftTries = this.betValue - this.count;
           console.log(this.leftTries, this.betValue, this.count);
-
           if (this.leftTries === 1) {
             this.numberOfTriesLeft = `<span class="important">Attention !</span> Il ne vous reste qu'<span class="important">1</span> tentative !`;
           } else if (this.leftTries != 1) {
@@ -261,11 +276,9 @@ export class NmGameComponent implements OnInit {
     this.tryRule = '';
     this.resetButtonVisible = true;
 
-    if (this.number.value === null) {
-      this.result = 'Veuillez écrire un nombre dans le formulaire.';
-    } else {
+    if (this.number.value != null) {
       this.count += 1;
-      this.gameResults = true;
+      this.changeBooleans(true, true, true);
       console.log(`Nombre de tentatives : ${this.count}`);
       if (this.number.value < this.random) {
         this.valueInfRandom();
@@ -299,9 +312,7 @@ export class NmGameComponent implements OnInit {
       this.reset = 'Réinitialiser le jeu';
     }
     this.betIsChecked = false;
-    this.isBasicDisabled = false;
-    this.gameResults = false;
-    this.legendIsHere = false;
+    this.gameResultsIsVisible = false;
     this.resetButtonVisible = false;
 
     this.attempts = new Array();
