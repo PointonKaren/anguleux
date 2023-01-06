@@ -18,12 +18,13 @@
       </div>
     </div>
     <p [innerHTML]="result"></p>
+    <p [innerHTML]="resultComment"></p>
     <p [innerHTML]="numberOfTriesLeft"></p>
   </div>
   <div *ngIf="gameResultsIsVisible" class="game--results">
     <tbody class="game--results--table">
       <tr>
-        <th>Essai n°</th>
+        <th>Tentative n°</th>
         <th>Nombre tenté</th>
         <th>Résultat</th>
       </tr>
@@ -48,5 +49,5 @@
   </div>
 </div>
 <div *ngIf="resetButtonVisible" class="resetButton">
-  <button (click)="resetFunction()" [innerHTML]="reset"></button>
+  <button (click)="resetFunction()">Nouvelle partie</button>
 </div>

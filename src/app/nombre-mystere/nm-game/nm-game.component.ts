@@ -10,7 +10,6 @@ import { FormControl } from '@angular/forms';
 })
 export class NmGameComponent implements OnInit {
   number = new FormControl(0);
-  tries = new FormControl(0);
 
   constructor() {}
   min = 0;
@@ -19,10 +18,10 @@ export class NmGameComponent implements OnInit {
   random = -1;
 
   result = '';
+  resultComment = '';
   status = '';
   tryRule = 'À vos propositions !';
   numberOfTriesLeft = '';
-  reset = 'Réinitialiser le jeu';
 
   formIsVisible = true;
   isResetDisabled = true;
@@ -192,22 +191,35 @@ export class NmGameComponent implements OnInit {
   };
 
   /**
-   * Booléens à modifier en cas de victoire
+   * Eléments communs en cas de victoire
    */
-  winBooleans = () => {
+  winCommon = () => {
     this.isWon = true;
     this.changeBooleans(false, true, true);
     this.storeBetInLS(this.betIsChecked, this.betValue, this.leftTries, true);
+    this.status = `<span class="important status">✔</span>`;
+    if (this.count === 1) {
+      this.resultComment =
+        'Félicitations, vous avez trouvé le Nombre Mystère du premier coup !';
+    } else {
+      this.resultComment = `Vous avez trouvé le Nombre Mystère en ${this.count} tentatives !`;
+    }
   };
 
   /**
    * Si réussite mais nombre mystère n'est pas 42
    */
   winButNot42 = () => {
-    this.result = `Bravo ! Le nombre à deviner, <span class="important">${this.random}</span>, a été trouvé en ${this.count} tentative(s) !`;
-    this.status = `<span class="important status">✔</span>`;
-    this.reset = 'Nouvelle partie';
-    this.winBooleans();
+    this.result = `Bravo, vous avez trouvé que le Nombre Mystère était <span class="important">${this.random}</span> !`;
+    this.winCommon();
+  };
+
+  /**
+   * Si réussite et nombre mystère = 42
+   */
+  perfectWin = () => {
+    this.result = `Hééééééé oui, 42 est encore une fois LA réponse ! 😁`;
+    this.winCommon();
   };
 
   /**
@@ -217,17 +229,8 @@ export class NmGameComponent implements OnInit {
     this.storeBetInLS(true, this.betValue, 0, false);
     this.changeBooleans(false, true, true);
     this.numberOfTriesLeft = `Perdu ! Le nombre de tentatives parié a été atteint.
-  <br/>Le Nombre Mystère était <span class="important">${this.random}</span>.`;
+    <br/>Le Nombre Mystère était <span class="important">${this.random}</span>.`;
     this.result = '';
-  };
-  /**
-   * Si réussite et nombre mystère = 42
-   */
-  perfectWin = () => {
-    this.result = `Hééééééé oui, 42 est encore une fois LA réponse ! <br/>Nombre d'essais : ${this.count}`;
-    this.reset = 'Nouvelle partie';
-    this.status = `<span class="important status">✔</span>`;
-    this.winBooleans();
   };
 
   /**
@@ -235,19 +238,20 @@ export class NmGameComponent implements OnInit {
    */
   betMode = () => {
     if (this.betIsChecked === true) {
+      this.leftTries = this.betValue - this.count;
       if (this.isWon != true) {
-        if (this.count >= this.betValue) {
+        // Si la partie n'est pas encore gagnée
+        if (this.count + 1 === this.betValue + 1) {
+          // Partie perdu (pari non réussi)
           this.lose();
         } else {
-          this.leftTries = this.betValue - this.count;
-          console.log(this.leftTries, this.betValue, this.count);
+          // Nombre de tentatives restantes = pari - n° tentative
           if (this.leftTries === 1) {
+            // Reste 1 tentative
             this.numberOfTriesLeft = `<span class="important">Attention !</span> Il ne vous reste qu'<span class="important">1</span> tentative !`;
           } else if (this.leftTries != 1) {
+            // Reste + d'1 tentative
             this.numberOfTriesLeft = `Il vous reste <span class="important">${this.leftTries}</span> tentatives sur les <span class="important">${this.betValue}</span> prévues.`;
-          } else {
-            this.numberOfTriesLeft =
-              'Un problème est survenu, veuillez réinitialiser le jeu svp.';
           }
           this.storeBetInLS(
             this.betIsChecked,
@@ -257,7 +261,7 @@ export class NmGameComponent implements OnInit {
           );
         }
       } else {
-        this.leftTries = this.betValue - this.count;
+        // Pari gagné !
         this.numberOfTriesLeft = `Sur les <span class="important">${this.betValue}</span> tentatives pariées, il en restait <span class="important">${this.leftTries}</span> !`;
         this.storeBetInLS(
           this.betIsChecked,
@@ -306,14 +310,14 @@ export class NmGameComponent implements OnInit {
     this.random = -1;
     this.count = 0;
 
+    this.number = new FormControl(0);
+
     this.result = '';
+    this.resultComment = '';
     this.numberOfTriesLeft = '';
-    if (this.reset === 'Nouvelle partie') {
-      this.reset = 'Réinitialiser le jeu';
-    }
+
     this.betIsChecked = false;
-    this.gameResultsIsVisible = false;
-    this.resetButtonVisible = false;
+    this.changeBooleans(true, false, false);
 
     this.attempts = new Array();
 
@@ -322,7 +326,6 @@ export class NmGameComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.tries = new FormControl(1);
     this.checkIfBet();
     this.randomizeNumber();
     this.getResultsFromLS();
