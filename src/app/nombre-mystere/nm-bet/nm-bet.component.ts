@@ -90,8 +90,13 @@ export class NmBetComponent {
          * Checkbox, bouton resetGame et formulaire non visibles,
          * Checkbox cochée, bouton modifier/annuler le pari visible
          */
-        this.tryText = `Il vous reste [X] tentative(s) et vous n'avez pas encore joué.
-        <br/>Vous avez encore le temps de modifier votre pari !`;
+        if (this.betValue === 1) {
+          this.tryText = `Vous n'avez pas encore tenté votre chance pour trouver le Nombre Mystère du premier coup.
+<br/>Il est encore temps de modifier votre pari !`;
+        } else {
+          this.tryText = `Vous n'avez pas encore tenté votre chance pour trouver le Nombre Mystère en moins de <span class="important">${this.betValue}</span> tentatives.
+          <br/>Il est encore temps de modifier votre pari !`;
+        }
       } else {
         //? Sinon, quel que soit le nombre de tentatives restantes :
         this.changeBooleans(false, true, false, true, false);
@@ -115,7 +120,7 @@ export class NmBetComponent {
             this.tryText = `<span class="important">Attention !</span> Il ne vous reste qu'une seule tentative !`;
           } else if (this.leftTries === 0) {
             //? Toutes les tentatives ont été utilisées
-            this.tryText = `Désolée, vous avez perdu le pari.`;
+            this.tryText = 'Désolée, vous avez perdu le pari.';
           }
         }
       }
