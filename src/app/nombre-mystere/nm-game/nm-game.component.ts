@@ -69,12 +69,9 @@ export class NmGameComponent implements OnInit {
    */
   checkIfBet = () => {
     if (this.betValue === 1) {
-      this.tryRule = `Quel courage ! Vous avez parié que vous réussirez à trouver le Nombre Mystère en 1 tentative !`;
-      if (this.attemptsStorage === null) {
-        console.log('bloup');
-      } else {
+      this.tryRule = `Vous avez parié que vous allez trouver le Nombre Mystère du premier coup... bonne chance 😁`;
+      if (this.attemptsStorage != null) {
         this.attempts = JSON.parse(this.attemptsStorage);
-        console.log(this.attempts);
       }
     } else if (
       this.betValue != null &&
@@ -221,6 +218,7 @@ export class NmGameComponent implements OnInit {
         if (this.count >= this.betValue) {
           this.numberOfTriesLeft = `Perdu ! Le nombre de tentatives parié a été atteint.
             <br/>Le Nombre Mystère était <span class="important">${this.random}</span>.`;
+          this.storeBetInLS(true, this.betValue, 0, false);
           this.legendIsHere = false;
           this.isBasicDisabled = true;
           this.result = '';

@@ -35,5 +35,5 @@
   </span>
 </div>
 <div *ngIf="resetGameIsVisible" class="resetButton">
-  <button (click)="resetFunction()">Abandonner la partie</button>
+  <button (click)="resetFunction()" [innerHTML]="resetButtonText"></button>
 </div>

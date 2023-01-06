@@ -16,6 +16,7 @@ export class NmBetComponent {
   tryText = '';
   betOrder = 'Pour pouvoir parier, cochez cette case. ';
   betComment = `Si vous changez d'avis, vous pouvez passer directement à l'étape 3 sans parier ;)`;
+  resetButtonText = 'Abandonner la partie';
 
   betDatas = [];
   storage = localStorage.getItem('storedDatas');
@@ -121,6 +122,7 @@ export class NmBetComponent {
           } else if (this.leftTries === 0) {
             //? Toutes les tentatives ont été utilisées
             this.tryText = 'Désolée, vous avez perdu le pari.';
+            this.resetButtonText = 'Nouvelle partie';
           }
         }
       }
