@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 
+//TODO: utiliser un service plutôt que le local storage
+
 @Component({
   selector: 'app-nombre-mystere',
   templateUrl: './nombre-mystere.component.html',

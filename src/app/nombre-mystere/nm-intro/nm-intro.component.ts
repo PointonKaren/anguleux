@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-//TODO: Prévoir un bouton pour réinitialiser le jeu
+
 //TODO: Faire basculer l'utilisateur sur le component associé au clic sur le nom de l'étape
 
 @Component({

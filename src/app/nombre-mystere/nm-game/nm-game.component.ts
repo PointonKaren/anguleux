@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-//TODO: Quand le jeu est gagné, réinitialiser la liste des tentatives. (isWon non pris en compte si retour sur étape 2 après réussite)
+// TODO: Changer "essai n°" en "tentative n°"
+// TODO: Passer result et resultComment au dessus du formulaire
+// TODO: retirer le ! à la fin de la phrase "Vous avez trouvé le Nombre Mystère en X tentatives !"
+// TODO: retirer le ! à la fin de la phrase "Sur les X tentatives pariées il en restait Y"
 
 @Component({
   selector: 'app-nm-game',

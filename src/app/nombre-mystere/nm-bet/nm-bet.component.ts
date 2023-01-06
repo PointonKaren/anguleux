@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 
 import { FormControl } from '@angular/forms';
 
+//TODO: Au retour sur le component après une première tentative, dynamiser le nombre de tentatives.
 //TODO: Afficher les messages d'erreur du formulaire à la saisie et non au clic (.dirty etc)
 
 @Component({
