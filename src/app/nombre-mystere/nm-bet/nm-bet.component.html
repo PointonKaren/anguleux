@@ -3,15 +3,18 @@
   Cette section permet de prédire le nombre de tentatives nécessaires pour
   deviner le Nombre Mystère.
 </h3>
-<p *ngIf="betCheckVisible">
-  <span [innerHTML]="betComment"></span>
-  <input
-    type="checkbox"
-    id="harderPleaseCheckbox"
-    [checked]="harderPlease"
-    (change)="harderPlease = !harderPlease"
-  />
-</p>
+<div *ngIf="betCheckVisible">
+  <p>
+    <span [innerHTML]="betOrder"></span>
+    <input
+      type="checkbox"
+      id="harderPleaseCheckbox"
+      [checked]="harderPlease"
+      (change)="harderPlease = !harderPlease"
+    />
+  </p>
+  <p [innerHTML]="betComment"></p>
+</div>
 
 <div *ngIf="harderPlease">
   <p *ngIf="betFormIsVisible">
@@ -24,13 +27,11 @@
       id="betInput"
       (keyup.enter)="betFunction()"
     />
-    <button type="button" (click)="betFunction()" id="betButton">
-      Envoyer
-    </button>
+    <button type="button" (click)="betFunction()" id="betButton">Parier</button>
   </p>
   <p [innerHTML]="tryText"></p>
   <span *ngIf="changeBetIsVisible" class="resetButton">
-    <button (click)="changeBet()">Annuler ou changer mon pari</button>
+    <button (click)="changeBet()">Modifier ou annuler mon pari</button>
   </span>
 </div>
 <div *ngIf="resetGameIsVisible" class="resetButton">

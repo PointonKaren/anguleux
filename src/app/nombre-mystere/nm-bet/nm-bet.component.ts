@@ -14,8 +14,9 @@ export class NmBetComponent {
   tries = new FormControl(1);
 
   tryText = '';
-  betComment =
-    "Cochez pour parier ! Vous pouvez aussi passer directement à l'étape 3 sans parier ;) ";
+  betOrder = 'Pour pouvoir parier, cochez cette case. ';
+  betComment = `Si vous changez d'avis, vous pouvez passer directement à l'étape 3 sans parier ;)`;
+
   betDatas = [];
   storage = localStorage.getItem('storedDatas');
   datas = JSON.parse(
@@ -26,18 +27,18 @@ export class NmBetComponent {
   leftTries = this.datas[2].value;
   isWon = this.datas[3].value;
 
-  betCheckVisible = true; // checkbox visible ou non
-  harderPlease = false; // checkbox cliquée ou non
-  changeBetIsVisible = false; // pari réalisé ou non
-  resetGameIsVisible = false; // bouton de reset visible ou non
-  betFormIsVisible = true; // formulaire + bouton reset visibles ou non
+  betCheckVisible = true; // checkbox visible
+  harderPlease = false; // checkbox non cochée
+  changeBetIsVisible = false; // Bouton pour annuler/modifier le pari non visible
+  resetGameIsVisible = false; // Bouton pour réinitialiser le jeu non visible
+  betFormIsVisible = true; // Formulaire de pari visible (mais uniquement quand la checkbox sera cochée)
 
   /**
    * Fonction générique qui stocke dans le local storage les données de pari + boolean réussite/échec du jeu
-   * @param betIsChecked :any
-   * @param betValue :any
-   * @param leftTries :any
-   * @param isWon :boolean
+   * @param betIsChecked any
+   * @param betValue any
+   * @param leftTries any
+   * @param isWon boolean
    */
   storeBetInLS = (
     betIsChecked: any,
@@ -56,11 +57,11 @@ export class NmBetComponent {
 
   /**
    *
-   * @param betCheckVisible : boolean (checkbox visible ou non)
-   * @param harderPlease : boolean (checkbox cliquée ou non)
-   * @param changeBetIsVisible : boolean (affiche le bouton pour modifier/annuler le pari)
-   * @param resetGameIsVisible : boolean (bouton de reset visible ou non)
-   * @param betFormIsVisible : boolean (formulaire + bouton "envoyer" visibles ou non)
+   * @param betCheckVisible boolean (checkbox visible ou non)
+   * @param harderPlease boolean (checkbox cliquée ou non)
+   * @param changeBetIsVisible boolean (affiche le bouton pour modifier/annuler le pari)
+   * @param resetGameIsVisible boolean (bouton de reset visible ou non)
+   * @param betFormIsVisible boolean (formulaire + bouton "envoyer" visibles ou non)
    */
   changeBooleans = (
     betCheckVisible: boolean,
@@ -79,7 +80,7 @@ export class NmBetComponent {
   /**
    * Fonction qui permet de gérer ce qui est affiché au chargement du component
    */
-  checkBetValue = () => {
+  checkBet = () => {
     if (this.betIsChecked) {
       // Si un pari a été effectué
       if (this.leftTries === null) {
@@ -112,6 +113,9 @@ export class NmBetComponent {
           } else if (this.leftTries === 1) {
             //? Reste une seule tentative
             this.tryText = `<span class="important">Attention !</span> Il ne vous reste qu'une seule tentative !`;
+          } else if (this.leftTries === 0) {
+            //? Toutes les tentatives ont été utilisées
+            this.tryText = `Désolée, vous avez perdu le pari.`;
           }
         }
       }
@@ -134,9 +138,15 @@ export class NmBetComponent {
        * Checkbox cochée, bouton modifier/annuler le pari visible
        */
       this.storeBetInLS(this.harderPlease, this.tries.value, null, false);
-      this.tryText = `C'est noté, il faudra donc trouver le Nombre Mystère en moins de <span class="important">${this.tries.value}</span> tentative(s) !
-      <br/>Vous pouvez désormais passer à l'étape 3 !
-      <br/>Vous pouvez également modifier ou annuler votre pari en cliquant sur le bouton ci-dessous.`;
+      if (this.tries.value === 1) {
+        this.tryText = `C'est noté, il vous faudra donc trouver le Nombre Mystère du premier coup.
+        <br/>Vous pouvez désormais passer à l'étape 3. Bon courage 😅
+        <br/>Vous pouvez également modifier ou annuler votre pari en cliquant sur le bouton ci-dessous.`;
+      } else {
+        this.tryText = `C'est noté, il faudra donc trouver le Nombre Mystère en moins de <span class="important">${this.tries.value}</span> tentatives !
+        <br/>Vous pouvez désormais passer à l'étape 3. Bonne chance !
+        <br/>Vous pouvez également modifier ou annuler votre pari en cliquant sur le bouton ci-dessous.`;
+      }
     }
   };
 
@@ -146,14 +156,13 @@ export class NmBetComponent {
   changeBet = () => {
     this.tries = new FormControl(1);
     this.tryText = '';
-    this.betComment = "Décocher pour annuler le pari, puis passer à l'étape 3.";
+    this.betOrder = "Décocher pour annuler le pari, puis passer à l'étape 3.";
+    this.betComment =
+      'Si vous souhaitez modifier votre pari, utilisez le formulaire ci-dessous.';
     this.changeBooleans(true, true, false, false, true);
     /** Action de changeBooleans
-     * checkbox visible
-     * Checkbox cochée,
-     * Formulaire visible,
-     * bouton modif non visible
-     * boutons resetGame non visible
+     * Checkbox visible et cochée, formulaire visible
+     * boutons modifier/annuler et resetGame non visibles
      */
     this.storeBetInLS(false, null, null, false);
   };
@@ -168,6 +177,6 @@ export class NmBetComponent {
   };
 
   ngOnInit(): void {
-    this.checkBetValue();
+    this.checkBet();
   }
 }
