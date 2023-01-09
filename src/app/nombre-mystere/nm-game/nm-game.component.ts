@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-// TODO: Changer "essai n°" en "tentative n°"
-// TODO: Passer result et resultComment au dessus du formulaire
-// TODO: retirer le ! à la fin de la phrase "Vous avez trouvé le Nombre Mystère en X tentatives !"
-// TODO: retirer le ! à la fin de la phrase "Sur les X tentatives pariées il en restait Y"
-
 @Component({
   selector: 'app-nm-game',
   templateUrl: './nm-game.component.html',
@@ -178,18 +173,18 @@ export class NmGameComponent implements OnInit {
   };
 
   /**
-   * Si essai < nombre mystère
+   * Si tentative < nombre mystère
    */
   valueInfRandom = () => {
-    this.result = `Essai n°${this.count} : <span class="important">${this.number.value}</span> est plus <span class="important">petit</span> que le nombre à deviner.`;
+    this.result = `Tentative n°${this.count} : <span class="important">${this.number.value}</span> est plus <span class="important">petit</span> que le nombre à deviner.`;
     this.status = `<span class="important status">🡹</span>`;
   };
 
   /**
-   * Si essai > nombre mystère
+   * Si tentative > nombre mystère
    */
   valueSupRandom = () => {
-    this.result = `Essai n°${this.count} : <span class="important">${this.number.value}</span> est plus <span class="important">grand</span> que le chiffre à deviner.`;
+    this.result = `Tentative n°${this.count} : <span class="important">${this.number.value}</span> est plus <span class="important">grand</span> que le chiffre à deviner.`;
     this.status = `<span class="important status">🡻</span>`;
   };
 
@@ -205,7 +200,7 @@ export class NmGameComponent implements OnInit {
       this.resultComment =
         'Félicitations, vous avez trouvé le Nombre Mystère du premier coup !';
     } else {
-      this.resultComment = `Vous avez trouvé le Nombre Mystère en ${this.count} tentatives !`;
+      this.resultComment = `Vous avez trouvé le Nombre Mystère en ${this.count} tentatives.`;
     }
   };
 
@@ -265,7 +260,7 @@ export class NmGameComponent implements OnInit {
         }
       } else {
         // Pari gagné !
-        this.numberOfTriesLeft = `Sur les <span class="important">${this.betValue}</span> tentatives pariées, il en restait <span class="important">${this.leftTries}</span> !`;
+        this.numberOfTriesLeft = `Sur les <span class="important">${this.betValue}</span> tentatives pariées, il en restait <span class="important">${this.leftTries}</span>.`;
         this.storeBetInLS(
           this.betIsChecked,
           this.betValue,

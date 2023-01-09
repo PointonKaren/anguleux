@@ -1,7 +1,10 @@
 <h2>Etape 3 : à vos marques... prêts... jouez !</h2>
 <div class="game">
   <div class="game--form">
+    <p [innerHTML]="result"></p>
+    <p [innerHTML]="resultComment"></p>
     <p [innerHTML]="tryRule"></p>
+    <p [innerHTML]="numberOfTriesLeft"></p>
     <div *ngIf="formIsVisible">
       <p>
         <label for="number">Choisissez un nombre entre 0 et 100 :</label>
@@ -17,9 +20,6 @@
         <button type="button" (click)="checkDatas()">Envoyer</button>
       </div>
     </div>
-    <p [innerHTML]="result"></p>
-    <p [innerHTML]="resultComment"></p>
-    <p [innerHTML]="numberOfTriesLeft"></p>
   </div>
   <div *ngIf="gameResultsIsVisible" class="game--results">
     <tbody class="game--results--table">
