@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NmGameComponent } from './nm-game.component';
 
+//TODO: Créer les tests unitaires
 // describe('NmGameComponent', () => {
 //   let component: NmGameComponent;
 //   let fixture: ComponentFixture<NmGameComponent>;

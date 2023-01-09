@@ -1,35 +1,30 @@
 <h2>Etape 3 : à vos marques... prêts... jouez !</h2>
 <div class="game">
   <div class="game--form">
-    <p [innerHTML]="tryRule"></p>
-    <p>
-      <label for="number">Choisissez un nombre entre 0 et 100 :</label>
-    </p>
-    <div class="form">
-      <input
-        type="number"
-        [formControl]="number"
-        min="0"
-        max="100"
-        (keyup.enter)="isBasicDisabled ? 'true' : checkDatas()"
-        [ngClass]="{ disableClass: isBasicDisabled }"
-      />
-      <button
-        type="button"
-        (click)="checkDatas()"
-        [disabled]="isBasicDisabled"
-        [ngClass]="{ disableClass: isBasicDisabled }"
-      >
-        Envoyer
-      </button>
-    </div>
     <p [innerHTML]="result"></p>
+    <p [innerHTML]="resultComment"></p>
+    <p [innerHTML]="tryRule"></p>
     <p [innerHTML]="numberOfTriesLeft"></p>
+    <div *ngIf="formIsVisible">
+      <p>
+        <label for="number">Choisissez un nombre entre 0 et 100 :</label>
+      </p>
+      <div class="form">
+        <input
+          type="number"
+          [formControl]="number"
+          min="0"
+          max="100"
+          (keyup.enter)="checkDatas()"
+        />
+        <button type="button" (click)="checkDatas()">Envoyer</button>
+      </div>
+    </div>
   </div>
-  <div *ngIf="gameResults" class="game--results">
+  <div *ngIf="gameResultsIsVisible" class="game--results">
     <tbody class="game--results--table">
       <tr>
-        <th>Essai n°</th>
+        <th>Tentative n°</th>
         <th>Nombre tenté</th>
         <th>Résultat</th>
       </tr>
@@ -41,7 +36,7 @@
         <td [innerHTML]="attempt.status"></td>
       </tr>
     </tbody>
-    <p *ngIf="legendIsHere">
+    <p>
       Légende :
       <br /><span class="important status">🡹</span> : Le Nombre Mystère est plus
       <span class="important">grand</span> que le nombre tenté. <br /><span
@@ -54,5 +49,5 @@
   </div>
 </div>
 <div *ngIf="resetButtonVisible" class="resetButton">
-  <button (click)="resetFunction()" [innerHTML]="reset"></button>
+  <button (click)="resetFunction()">Nouvelle partie</button>
 </div>

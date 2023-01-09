@@ -8,8 +8,6 @@ import { FormControl } from '@angular/forms';
 })
 export class NmGameComponent implements OnInit {
   number = new FormControl(0);
-  tries = new FormControl(0);
-  isBasicDisabled = false;
 
   constructor() {}
   min = 0;
@@ -18,16 +16,16 @@ export class NmGameComponent implements OnInit {
   random = -1;
 
   result = '';
+  resultComment = '';
   status = '';
   tryRule = 'À vos propositions !';
   numberOfTriesLeft = '';
-  reset = 'Réinitialiser le jeu';
 
+  formIsVisible = true;
   isResetDisabled = true;
   isWon = false;
   sameNumber = false;
-  gameResults = false;
-  legendIsHere = false;
+  gameResultsIsVisible = false;
   resetButtonVisible = false;
 
   attempts = new Array();
@@ -62,17 +60,23 @@ export class NmGameComponent implements OnInit {
     }
   };
 
+  checkGameStatus = () => {
+    if (this.attemptsStorage != null) {
+      this.attempts = JSON.parse(this.attemptsStorage);
+      console.log(this.attempts.length);
+      this.tryRule = 'On continue la partie ?';
+      this.changeBooleans(true, true, true);
+    }
+  };
+
   /**
    * Fonction qui vérifie si un pari a été lancé dans l'étape 2
    */
   checkIfBet = () => {
     if (this.betValue === 1) {
-      this.tryRule = `Quel courage ! Vous avez parié que vous réussirez à trouver le Nombre Mystère en 1 tentative !`;
-      if (this.attemptsStorage === null) {
-        console.log('bloup');
-      } else {
+      this.tryRule = `Vous avez parié que vous allez trouver le Nombre Mystère du premier coup... bonne chance 😁`;
+      if (this.attemptsStorage != null) {
         this.attempts = JSON.parse(this.attemptsStorage);
-        console.log(this.attempts);
       }
     } else if (
       this.betValue != null &&
@@ -117,6 +121,7 @@ export class NmGameComponent implements OnInit {
         }
         if (this.sameNumber === true) {
           // Nombres identiques
+          this.tryRule = '';
           this.result = `<span class="important">${this.number.value}</span> a déjà été testé, veuillez proposer un autre nombre SVP.`;
         } else {
           // Nombres différents
@@ -130,92 +135,110 @@ export class NmGameComponent implements OnInit {
   };
 
   /**
-   * Fonction qui réinitialise le jeu
-   */
-  resetFunction = () => {
-    this.random = -1;
-    this.count = 0;
-
-    this.result = '';
-    this.numberOfTriesLeft = '';
-    if (this.reset === 'Nouvelle partie') {
-      this.reset = 'Réinitialiser le jeu';
-    }
-    this.betIsChecked = false;
-    this.isBasicDisabled = false;
-    this.gameResults = false;
-    this.legendIsHere = false;
-    this.resetButtonVisible = false;
-
-    this.attempts = new Array();
-
-    localStorage.clear();
-    const betDatas = [
-      { name: 'betIsChecked', value: false },
-      { name: 'betValue', value: null },
-      { name: 'leftTries', value: null },
-    ];
-    localStorage.setItem('storedDatas', JSON.stringify(betDatas));
-  };
-
-  /**
    * Fonction qui récupère les données du tableau de résultats
    * (Utile en cas de rechargement de l'étape 3 par l'utilisateur)
    */
   getResultsFromLS = () => {
     if (this.attemptsStorage != null) {
-      console.log(JSON.parse(this.attemptsStorage));
       this.attempts = JSON.parse(this.attemptsStorage);
-      console.log(this.attempts);
-      this.gameResults = true;
+      this.gameResultsIsVisible = true;
     }
   };
 
   /**
-   * Si essai < nombre mystère
+   * Fonction qui stocke dans le local storage les données de pari + boolean réussite/échec du jeu
+   * @param betIsChecked :any
+   * @param betValue :any
+   * @param leftTries :any
+   * @param isWon :boolean
+   */
+  storeBetInLS = (
+    betIsChecked: any,
+    betValue: any,
+    leftTries: any,
+    isWon: boolean
+  ) => {
+    const betDatas = [
+      { name: 'betIsChecked', value: betIsChecked },
+      { name: 'betValue', value: betValue },
+      { name: 'leftTries', value: leftTries },
+      { name: 'isWon', value: isWon },
+    ];
+    localStorage.setItem('storedDatas', JSON.stringify(betDatas));
+  };
+  /**
+   *
+   * @param formIsVisible boolean (Formulaire visible ou non)
+   * @param gameResultsIsVisible boolean (Tableau de résultats visible ou non)
+   * @param resetButtonVisible (Bouton resetGame visible ou non)
+   */
+  changeBooleans = (
+    formIsVisible: boolean,
+    gameResultsIsVisible: boolean,
+    resetButtonVisible: boolean
+  ) => {
+    this.formIsVisible = formIsVisible;
+    this.gameResultsIsVisible = gameResultsIsVisible;
+    this.resetButtonVisible = resetButtonVisible;
+  };
+
+  /**
+   * Si tentative < nombre mystère
    */
   valueInfRandom = () => {
-    this.legendIsHere = true;
-    this.result = `Essai n°${this.count} : <span class="important">${this.number.value}</span> est plus <span class="important">petit</span> que le nombre à deviner.`;
+    this.result = `Tentative n°${this.count} : <span class="important">${this.number.value}</span> est plus <span class="important">petit</span> que le nombre à deviner.`;
     this.status = `<span class="important status">🡹</span>`;
   };
 
   /**
-   * Si essai > nombre mystère
+   * Si tentative > nombre mystère
    */
   valueSupRandom = () => {
-    this.legendIsHere = true;
-    this.result = `Essai n°${this.count} : <span class="important">${this.number.value}</span> est plus <span class="important">grand</span> que le chiffre à deviner.`;
+    this.result = `Tentative n°${this.count} : <span class="important">${this.number.value}</span> est plus <span class="important">grand</span> que le chiffre à deviner.`;
     this.status = `<span class="important status">🡻</span>`;
   };
 
   /**
-   * Booléens à modifier en cas de victoire
+   * Eléments communs en cas de victoire
    */
-  winBooleans = () => {
-    this.isBasicDisabled = true;
+  winCommon = () => {
     this.isWon = true;
-    this.legendIsHere = false;
+    this.changeBooleans(false, true, true);
+    this.storeBetInLS(this.betIsChecked, this.betValue, this.leftTries, true);
+    this.status = `<span class="important status">✔</span>`;
+    if (this.count === 1) {
+      this.resultComment =
+        'Félicitations, vous avez trouvé le Nombre Mystère du premier coup !';
+    } else {
+      this.resultComment = `Vous avez trouvé le Nombre Mystère en <span class="important">${this.count}</span> tentatives.`;
+    }
   };
 
   /**
    * Si réussite mais nombre mystère n'est pas 42
    */
   winButNot42 = () => {
-    this.result = `Bravo ! Le nombre à deviner, <span class="important">${this.random}</span>, a été trouvé en ${this.count} tentative(s) !`;
-    this.status = `<span class="important status">✔</span>`;
-    this.reset = 'Nouvelle partie';
-    this.winBooleans();
+    this.result = `Bravo, vous avez trouvé que le Nombre Mystère était <span class="important">${this.random}</span> !`;
+    this.winCommon();
   };
 
   /**
    * Si réussite et nombre mystère = 42
    */
   perfectWin = () => {
-    this.result = `Hééééééé oui, 42 est encore une fois LA réponse ! <br/>Nombre d'essais : ${this.count}`;
-    this.reset = 'Nouvelle partie';
-    this.status = `<span class="important status">✔</span>`;
-    this.winBooleans();
+    this.result = `Hééééééé oui, 42 est encore une fois LA réponse ! 😁`;
+    this.winCommon();
+  };
+
+  /**
+   * Si échec (uniquement en cas de pari non réussi)
+   */
+  lose = () => {
+    this.storeBetInLS(true, this.betValue, 0, false);
+    this.changeBooleans(false, true, true);
+    this.numberOfTriesLeft = `Perdu ! Le nombre de tentatives parié a été atteint.
+    <br/>Le Nombre Mystère était <span class="important">${this.random}</span>.`;
+    this.result = '';
   };
 
   /**
@@ -223,35 +246,37 @@ export class NmGameComponent implements OnInit {
    */
   betMode = () => {
     if (this.betIsChecked === true) {
+      this.leftTries = this.betValue - this.count;
       if (this.isWon != true) {
-        if (this.count >= this.betValue) {
-          this.numberOfTriesLeft = `Perdu ! Le nombre de tentatives parié a été atteint.
-            <br/>Le Nombre Mystère était <span class="important">${this.random}</span>.`;
-          this.legendIsHere = false;
-          this.isBasicDisabled = true;
-          this.result = '';
+        // Si la partie n'est pas encore gagnée
+        if (this.count + 1 === this.betValue + 1) {
+          // Partie perdu (pari non réussi)
+          this.lose();
         } else {
-          this.leftTries = this.betValue - this.count;
-          console.log(this.leftTries, this.betValue, this.count);
-
+          // Nombre de tentatives restantes = pari - n° tentative
           if (this.leftTries === 1) {
+            // Reste 1 tentative
             this.numberOfTriesLeft = `<span class="important">Attention !</span> Il ne vous reste qu'<span class="important">1</span> tentative !`;
           } else if (this.leftTries != 1) {
+            // Reste + d'1 tentative
             this.numberOfTriesLeft = `Il vous reste <span class="important">${this.leftTries}</span> tentatives sur les <span class="important">${this.betValue}</span> prévues.`;
-          } else {
-            this.numberOfTriesLeft =
-              'Un problème est survenu, veuillez réinitialiser le jeu svp.';
           }
-          const betDatas = [
-            { name: 'betIsChecked', value: this.betIsChecked },
-            { name: 'betValue', value: this.betValue },
-            { name: 'leftTries', value: this.leftTries },
-          ];
-          localStorage.setItem('storedDatas', JSON.stringify(betDatas));
+          this.storeBetInLS(
+            this.betIsChecked,
+            this.betValue,
+            this.leftTries,
+            this.isWon
+          );
         }
       } else {
-        this.leftTries = this.betValue - this.count;
-        this.numberOfTriesLeft = `Sur les <span class="important">${this.betValue}</span> tentatives pariées, il en restait <span class="important">${this.leftTries}</span> !`;
+        // Pari gagné !
+        this.numberOfTriesLeft = `Sur les <span class="important">${this.betValue}</span> tentatives pariées, il en restait <span class="important">${this.leftTries}</span>.`;
+        this.storeBetInLS(
+          this.betIsChecked,
+          this.betValue,
+          this.leftTries,
+          this.isWon
+        );
       }
     }
   };
@@ -262,12 +287,11 @@ export class NmGameComponent implements OnInit {
   gameFunction = () => {
     this.tryRule = '';
     this.resetButtonVisible = true;
+    this.count = this.attempts.length;
 
-    if (this.number.value === null) {
-      this.result = 'Veuillez écrire un nombre dans le formulaire.';
-    } else {
+    if (this.number.value != null) {
       this.count += 1;
-      this.gameResults = true;
+      this.changeBooleans(true, true, true);
       console.log(`Nombre de tentatives : ${this.count}`);
       if (this.number.value < this.random) {
         this.valueInfRandom();
@@ -288,12 +312,33 @@ export class NmGameComponent implements OnInit {
     this.betMode();
   };
 
+  /**
+   * Fonction qui réinitialise le jeu
+   */
+  resetFunction = () => {
+    this.random = -1;
+    this.count = 0;
+
+    this.number = new FormControl(0);
+
+    this.result = '';
+    this.resultComment = '';
+    this.numberOfTriesLeft = '';
+
+    this.betIsChecked = false;
+    this.changeBooleans(true, false, false);
+
+    this.attempts = new Array();
+
+    localStorage.clear();
+    this.storeBetInLS(false, null, null, false);
+  };
+
   ngOnInit(): void {
-    this.tries = new FormControl(1);
+    this.checkGameStatus();
     this.checkIfBet();
     this.randomizeNumber();
     this.getResultsFromLS();
     console.log(`Le nombre aléatoire est : ${this.random}`);
   }
 }
-//TODO: Faire que le bouton réinitialiser le jeu réinitialise également le pari et redirige vers Etape 1

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-//TODO: Prévoir un bouton pour réinitialiser le jeu
+
 //TODO: Faire basculer l'utilisateur sur le component associé au clic sur le nom de l'étape
 
 @Component({
@@ -19,6 +19,7 @@ export class NmIntroComponent implements OnInit {
       { name: 'betIsChecked', value: false },
       { name: 'betValue', value: null },
       { name: 'leftTries', value: null },
+      { name: 'isWon', value: false },
     ];
 
     localStorage.setItem('storedDatas', JSON.stringify(betDatas));

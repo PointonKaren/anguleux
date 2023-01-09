@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
+//TODO: Tester que les descriptions apparaissent bien au survol.
+
 import { GameListComponent } from './game-list.component';
 
 describe('Visibilité par défaut de la description du jeu', () => {

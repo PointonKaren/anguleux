@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NmBetComponent } from './nm-bet.component';
 
-//TODO: Continuer à faire les tests unitaires
+//TODO: Travailler sur les tests unitaires
 
 describe('Test de la fonction betFunction', () => {
   let component: NmBetComponent;
