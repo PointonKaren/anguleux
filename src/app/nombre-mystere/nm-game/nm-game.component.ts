@@ -277,6 +277,7 @@ export class NmGameComponent implements OnInit {
   gameFunction = () => {
     this.tryRule = '';
     this.resetButtonVisible = true;
+    this.count = this.attempts.length;
 
     if (this.number.value != null) {
       this.count += 1;
