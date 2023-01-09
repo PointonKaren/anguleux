@@ -60,6 +60,15 @@ export class NmGameComponent implements OnInit {
     }
   };
 
+  checkGameStatus = () => {
+    if (this.attemptsStorage != null) {
+      this.attempts = JSON.parse(this.attemptsStorage);
+      console.log(this.attempts.length);
+      this.tryRule = 'On continue la partie ?';
+      this.changeBooleans(true, true, true);
+    }
+  };
+
   /**
    * Fonction qui vérifie si un pari a été lancé dans l'étape 2
    */
@@ -326,6 +335,7 @@ export class NmGameComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.checkGameStatus();
     this.checkIfBet();
     this.randomizeNumber();
     this.getResultsFromLS();
