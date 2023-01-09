@@ -342,4 +342,3 @@ export class NmGameComponent implements OnInit {
     console.log(`Le nombre aléatoire est : ${this.random}`);
   }
 }
-//TODO: Faire que le bouton réinitialiser le jeu réinitialise également le pari et redirige vers Etape 1
