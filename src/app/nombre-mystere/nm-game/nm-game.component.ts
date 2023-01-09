@@ -112,6 +112,7 @@ export class NmGameComponent implements OnInit {
         }
         if (this.sameNumber === true) {
           // Nombres identiques
+          this.tryRule = '';
           this.result = `<span class="important">${this.number.value}</span> a déjà été testé, veuillez proposer un autre nombre SVP.`;
         } else {
           // Nombres différents
@@ -200,7 +201,7 @@ export class NmGameComponent implements OnInit {
       this.resultComment =
         'Félicitations, vous avez trouvé le Nombre Mystère du premier coup !';
     } else {
-      this.resultComment = `Vous avez trouvé le Nombre Mystère en ${this.count} tentatives.`;
+      this.resultComment = `Vous avez trouvé le Nombre Mystère en <span class="important">${this.count}</span> tentatives.`;
     }
   };
 
