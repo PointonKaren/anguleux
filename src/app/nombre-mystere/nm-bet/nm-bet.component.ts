@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 
 import { FormControl } from '@angular/forms';
 
-//TODO: Au retour sur le component après une première tentative, dynamiser le nombre de tentatives.
 //TODO: Afficher les messages d'erreur du formulaire à la saisie et non au clic (.dirty etc)
 
 @Component({
@@ -28,6 +27,18 @@ export class NmBetComponent {
   betValue = this.datas[1].value;
   leftTries = this.datas[2].value;
   isWon = this.datas[3].value;
+
+  storedMysteryNumber = localStorage.getItem('mysteryNumber');
+  mysteryNumber = null;
+
+  attemptsArray = [];
+  attemptsStorage = localStorage.getItem('attempts');
+  attemptsDatas = JSON.parse(
+    this.attemptsStorage != null
+      ? this.attemptsStorage
+      : JSON.stringify(this.attemptsArray)
+  );
+  count = 0;
 
   betCheckVisible = true; // checkbox visible
   harderPlease = false; // checkbox non cochée
@@ -80,6 +91,19 @@ export class NmBetComponent {
   };
 
   /**
+   * Récupérer le nombre mystère depuis le local storage
+   */
+  getMysteryNumberFromLS = () => {
+    if (this.storedMysteryNumber != null) {
+      this.mysteryNumber = JSON.parse(this.storedMysteryNumber);
+    }
+  };
+
+  getAttemptsDatasfromLS = () => {
+    this.count = JSON.parse(this.attemptsDatas.length);
+  };
+
+  /**
    * Fonction qui permet de gérer ce qui est affiché au chargement du component
    */
   checkBet = () => {
@@ -108,13 +132,35 @@ export class NmBetComponent {
          */
         if (this.isWon) {
           //? Pari gagné
-          this.tryText = `Félicitations, vous avez trouvé le Nombre Mystère qui était [X] !
-          <br/>Vous avez réussi en [X] tentative(s) alors qu'il vous en restait [X].`;
+          this.getMysteryNumberFromLS();
+          this.getAttemptsDatasfromLS();
+          if (this.count === 1) {
+            switch (this.leftTries) {
+              case 0:
+                this.tryText = `Félicitations, vous avez réussi l'impossible ! Vous avez trouvé du premier coup que le Nombre Mystère était <span class="important">${this.mysteryNumber}</span> !`;
+                break;
+              case 1:
+                this.tryText = `Félicitations ! Vous aviez parié y arriver en deux tentatives, et vous avez trouvé du premier coup que le Nombre Mystère était <span class="important">${this.mysteryNumber}</span> !`;
+                break;
+              default:
+                this.tryText = `Félicitations, vous avez trouvé du premier coup que le Nombre Mystère était <span class="important">${this.mysteryNumber}</span> ! Il vous restait <span class="important">${this.leftTries}</span> tentatives.`;
+                break;
+            }
+          } else {
+            if (this.leftTries <= 1) {
+              this.tryText = `Pfiou ! Il s'en est fallu de peu ! Vous avez trouvé <i>in extremis</i> que le Nombre Mystère était <span class="important">${this.mysteryNumber}</span> !
+              <br/>Vous avez réussi en <span class="important">${this.count}</span> tentatives.`;
+            } else {
+              this.tryText = `Félicitations, vous avez trouvé le Nombre Mystère qui était <span class="important">${this.mysteryNumber}</span> !
+              <br/>Vous avez réussi en <span class="important">${this.count}</span> tentatives alors qu'il vous en restait <span class="important">${this.leftTries}</span>.`;
+            }
+          }
+          this.resetButtonText = 'Nouvelle partie';
         } else {
           //? Nombre mystère pas encore trouvé
           if (this.leftTries > 1) {
             //? Reste plus d'une tentative
-            this.tryText = `Il vous reste [X] tentatives pour trouver le Nombre Mystère.
+            this.tryText = `Il vous reste <span class="important">${this.leftTries}</span> tentatives pour trouver le Nombre Mystère.
             <br/>Vous ne pouvez plus modifier votre pari.
             <br/>Souhaitez vous abandonner ?`;
           } else if (this.leftTries === 1) {
@@ -122,7 +168,8 @@ export class NmBetComponent {
             this.tryText = `<span class="important">Attention !</span> Il ne vous reste qu'une seule tentative !`;
           } else if (this.leftTries === 0) {
             //? Toutes les tentatives ont été utilisées
-            this.tryText = 'Désolée, vous avez perdu le pari.';
+            this.tryText = `Désolée, vous avez perdu le pari 😥
+            <br/>Souhaitez-vous recommencer ?`;
             this.resetButtonText = 'Nouvelle partie';
           }
         }
@@ -186,5 +233,6 @@ export class NmBetComponent {
 
   ngOnInit(): void {
     this.checkBet();
+    // this.getAttemptsDatasfromLS();
   }
 }
