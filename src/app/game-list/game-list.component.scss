@@ -4,8 +4,8 @@
 .games {
   margin-top: 15vh;
   .cube-wrap {
-    -webkit-perspective: 1000px;
-    perspective: 1000px;
+    -webkit-perspective: 2000px;
+    perspective: 2000px;
     -webkit-perspective-origin: 50% 50%;
     perspective-origin: 50% 50%;
     .cube {
@@ -16,7 +16,7 @@
       -webkit-transform-style: preserve-3d;
       transform-style: preserve-3d;
       //*ROTATION DU CUBE :
-      -webkit-transform: rotateX(-20deg) rotateY(45deg) rotateZ(-10deg);
+      -webkit-transform: rotateX(-20deg) rotateY(50deg) rotateZ(-10deg);
       transform: rotateX(-20deg) rotateY(50deg) rotateZ(-10deg);
       div {
         position: absolute;
@@ -53,11 +53,6 @@
           }
         }
       }
-      .back {
-        -webkit-transform: translateZ(-100px) rotateY(180deg);
-        transform: translateZ(-100px) rotateY(180deg);
-        background-color: $height;
-      }
       .top {
         -webkit-transform: rotateX(-270deg) translateY(-100px);
         transform: rotateX(-270deg) translateY(-100px);
@@ -66,6 +61,7 @@
         transform-origin: top center;
         background-color: $five;
         .games-title {
+          color: $seven;
           line-height: normal;
           margin: auto;
           height: 250px;
@@ -77,14 +73,6 @@
           align-items: center;
           font-size: 2rem;
         }
-      }
-      .bottom {
-        -webkit-transform: rotateX(270deg) translateY(100px);
-        transform: rotateX(270deg) translateY(100px);
-        -webkit-transform-origin: bottom center;
-        -ms-transform-origin: bottom center;
-        transform-origin: bottom center;
-        background-color: $height;
       }
       .left {
         -webkit-transform: rotateY(270deg) translateX(-100px);
@@ -106,14 +94,6 @@
           -ms-flex-align: center;
           align-items: center;
         }
-      }
-      .right {
-        -webkit-transform: rotateY(-270deg) translateX(100px);
-        transform: rotateY(-270deg) translateX(100px);
-        -webkit-transform-origin: top right;
-        -ms-transform-origin: top right;
-        transform-origin: top right;
-        background-color: $height;
       }
     }
   }
