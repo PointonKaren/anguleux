@@ -110,7 +110,7 @@ export class NmBetComponent {
    */
   checkBet = () => {
     this.getAttemptsDatasfromLS();
-    if (this.count >= 1) {
+    if (this.count >= 1 && this.isWon === false) {
       this.errorText = `Vous avez déjà commencé à jouer, vous ne pouvez donc plus parier.
   <br/> Si vous souhaitez parier, il faut abandonner la partie en cliquant sur le bouton ci-dessous.`;
       this.changeBooleans(false, false, false, true, false);
@@ -141,6 +141,7 @@ export class NmBetComponent {
           if (this.isWon) {
             //? Pari gagné
             this.getMysteryNumberFromLS();
+            this.errorText = '';
             if (this.count === 1) {
               switch (this.leftTries) {
                 case 0:
@@ -233,8 +234,9 @@ export class NmBetComponent {
   resetFunction = () => {
     this.tryText = '';
     this.changeBooleans(true, true, false, false, true);
-    this.betComment = `Si vous souhaitez parier de nouveau, utilisez le formulaire.
-      <br/>Sinon, décochez cette case et passez à l'étape 3`;
+    this.betOrder = `Si vous ne souhaitez <span class="important">pas</span> parier, décochez cette case :`;
+    this.betComment = `et passez directement à l'étape 3.
+    <br/>Sinon, utilisez le formulaire pour prédire le nombre de tentatives qu'il vous faudra pour deviner le Nombre Mystère !`;
     localStorage.clear();
     this.storeBetInLS(false, null, null, false);
   };
