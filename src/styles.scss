@@ -9,6 +9,8 @@
 // component
 @import "./assets/style/components/buttons";
 
+//TODO: rendre le site responsive
+
 body {
   background-color: $body;
   width: 100%;
@@ -17,8 +19,6 @@ body {
 * {
   color: $text;
   font-family: Verdana, Tahoma, sans-serif;
-  // font-size: 1.1rem;
-  //TODO: décommenter la taille
 }
 h1 {
   color: $h1;

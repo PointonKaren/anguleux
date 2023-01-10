@@ -16,8 +16,8 @@
       -webkit-transform-style: preserve-3d;
       transform-style: preserve-3d;
       //*ROTATION DU CUBE :
-      -webkit-transform: rotateX(-5deg) rotateY(45deg) rotateZ(-17deg);
-      transform: rotateX(-17deg) rotateY(45deg) rotateZ(-10deg);
+      -webkit-transform: rotateX(-20deg) rotateY(45deg) rotateZ(-10deg);
+      transform: rotateX(-20deg) rotateY(50deg) rotateZ(-10deg);
       div {
         position: absolute;
         -webkit-box-sizing: border-box;
@@ -32,9 +32,21 @@
         font-weight: bold;
       }
       .front {
-        -webkit-transform: translateZ(100px);
+        -webkit-transform: translateZ(150px);
         transform: translateZ(150px);
         background-color: $seven;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding-top: 20px;
+        padding-bottom: 20px;
         .link {
           &:hover {
             cursor: pointer;

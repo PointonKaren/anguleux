@@ -7,7 +7,6 @@ import { GameListComponent } from './game-list/game-list.component';
 import { NombreMystereComponent } from './nombre-mystere/nombre-mystere.component';
 import { MastermindComponent } from './mastermind/mastermind.component';
 import { PenduComponent } from './pendu/pendu.component';
-import { TetrisComponent } from './tetris/tetris.component';
 import { AboutMeComponent } from './about-me/about-me.component';
 import { NmBetComponent } from './nombre-mystere/nm-bet/nm-bet.component';
 import { NmIntroComponent } from './nombre-mystere/nm-intro/nm-intro.component';
@@ -24,7 +23,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     NombreMystereComponent,
     MastermindComponent,
     PenduComponent,
-    TetrisComponent,
     AboutMeComponent,
     NmBetComponent,
     NmIntroComponent,

@@ -29,14 +29,6 @@
         >
           Pendu
         </p>
-        <p
-          routerLink="/tetris"
-          class="link"
-          (mouseenter)="tetris = true"
-          (mouseleave)="tetris = false"
-        >
-          Tetris
-        </p>
       </div>
       <div class="back"></div>
       <div class="bottom"></div>
@@ -52,9 +44,6 @@
         <p class="games-description" *ngIf="pendu">
           Le navigateur choisit un mot, vous avez un nombre limité de tentatives
           pour le deviner.
-        </p>
-        <p class="games-description" *ngIf="tetris">
-          Purement et simplement : Tetris ;)
         </p>
       </div>
       <div class="right"></div>

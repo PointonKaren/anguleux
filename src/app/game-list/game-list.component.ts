@@ -9,12 +9,10 @@ export class GameListComponent {
   justePrix: boolean;
   mastermind: boolean;
   pendu: boolean;
-  tetris: boolean;
 
   constructor() {
     this.justePrix = false;
     this.mastermind = false;
     this.pendu = false;
-    this.tetris = false;
   }
 }
