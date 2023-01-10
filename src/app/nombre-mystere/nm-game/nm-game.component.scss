@@ -2,14 +2,13 @@
 @import "../../../assets/style/utils/mixins";
 
 .game {
-  width: 80vw;
-  max-width: 1200px;
-  margin: auto;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  gap: 40px;
   &--form {
-    width: 50%;
+    -ms-flex-item-align: center;
+    align-self: center;
     .form {
       display: -webkit-box;
       display: -ms-flexbox;
@@ -26,8 +25,8 @@
     &--table {
       tr {
         th {
-          border: 1px solid $seven;
-          width: 200px;
+          border: 1px solid $six;
+          width: 150px;
           text-align: center;
         }
         td {
@@ -36,5 +35,21 @@
         }
       }
     }
+  }
+}
+.legend {
+  text-align: center;
+}
+.resetButton {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  button {
+    -ms-flex-item-align: center;
+    align-self: center;
   }
 }

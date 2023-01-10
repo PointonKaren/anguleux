@@ -1,19 +1,21 @@
 <h1>Nombre Mystère</h1>
 <section id="MysteryNumber">
-  <div class="rules">
+  <div class="nm">
     <h2>Préambule</h2>
     <p>
       Dans ce petit jeu, un nombre aléatoire entre 0 et 100 a été sélectionné
       par l'ordinateur.
       <br />Le but du jeu ? Trouver ce nombre le plus rapidement possible !
     </p>
-    <div class="nm-box">
+    <div class="nm-tab">
       <span (click)="showIntro()" id="intro">Etape 1 : Introduction</span>
       <span (click)="showBet()" id="bet">Etape 2 : Activer le mode "Pari"</span>
       <span (click)="showGame()" id="game">Etape 3 : Jouons !</span>
     </div>
-    <app-nm-intro *ngIf="intro"></app-nm-intro>
-    <app-nm-bet *ngIf="bet"></app-nm-bet>
-    <app-nm-game *ngIf="game"></app-nm-game>
+    <div class="nm-box">
+      <app-nm-intro *ngIf="intro"></app-nm-intro>
+      <app-nm-bet *ngIf="bet"></app-nm-bet>
+      <app-nm-game *ngIf="game"></app-nm-game>
+    </div>
   </div>
 </section>

@@ -1,53 +1,55 @@
-<h2>Etape 3 : à vos marques... prêts... jouez !</h2>
-<div class="game">
-  <div class="game--form">
-    <p [innerHTML]="result"></p>
-    <p [innerHTML]="resultComment"></p>
-    <p [innerHTML]="tryRule"></p>
-    <p [innerHTML]="numberOfTriesLeft"></p>
-    <div *ngIf="formIsVisible">
-      <p>
-        <label for="number">Choisissez un nombre entre 0 et 100 :</label>
-      </p>
-      <div class="form">
-        <input
-          type="number"
-          [formControl]="number"
-          min="0"
-          max="100"
-          (keyup.enter)="checkDatas()"
-        />
-        <button type="button" (click)="checkDatas()">Envoyer</button>
+<div class="nm-box-content">
+  <h2>Etape 3 : à vos marques... prêts... jouez !</h2>
+  <div class="game">
+    <div class="game--form">
+      <p [innerHTML]="result"></p>
+      <p [innerHTML]="resultComment"></p>
+      <p [innerHTML]="tryRule"></p>
+      <p [innerHTML]="numberOfTriesLeft"></p>
+      <div *ngIf="formIsVisible">
+        <p>
+          <label for="number">Choisissez un nombre entre 0 et 100 :</label>
+        </p>
+        <div class="form">
+          <input
+            type="number"
+            [formControl]="number"
+            min="0"
+            max="100"
+            (keyup.enter)="checkDatas()"
+          />
+          <button type="button" (click)="checkDatas()">Envoyer</button>
+        </div>
       </div>
     </div>
+    <div *ngIf="gameResultsIsVisible" class="game--results">
+      <tbody class="game--results--table">
+        <tr>
+          <th>Tentative n°</th>
+          <th>Nombre tenté</th>
+          <th>Résultat</th>
+        </tr>
+        <tr *ngFor="let attempt of attempts">
+          <td>{{ attempt.count }}</td>
+          <td>
+            {{ attempt.number }}
+          </td>
+          <td [innerHTML]="attempt.status"></td>
+        </tr>
+      </tbody>
+    </div>
   </div>
-  <div *ngIf="gameResultsIsVisible" class="game--results">
-    <tbody class="game--results--table">
-      <tr>
-        <th>Tentative n°</th>
-        <th>Nombre tenté</th>
-        <th>Résultat</th>
-      </tr>
-      <tr *ngFor="let attempt of attempts">
-        <td>{{ attempt.count }}</td>
-        <td>
-          {{ attempt.number }}
-        </td>
-        <td [innerHTML]="attempt.status"></td>
-      </tr>
-    </tbody>
-    <p>
-      Légende :
-      <br /><span class="important status">🡹</span> : Le Nombre Mystère est plus
-      <span class="important">grand</span> que le nombre tenté. <br /><span
-        class="important status"
-        >🡻</span
-      >
-      : Le Nombre Mystère est plus <span class="important">petit</span> que le
-      nombre tenté.
-    </p>
+  <p *ngIf="gameResultsIsVisible" class="legend">
+    Légende :
+    <br /><span class="important status">🡹</span> : Le Nombre Mystère est plus
+    <span class="important">grand</span> que le nombre tenté. <br /><span
+      class="important status"
+      >🡻</span
+    >
+    : Le Nombre Mystère est plus <span class="important">petit</span> que le
+    nombre tenté.
+  </p>
+  <div *ngIf="resetButtonVisible" class="resetButton">
+    <button (click)="resetFunction()">Nouvelle partie</button>
   </div>
-</div>
-<div *ngIf="resetButtonVisible" class="resetButton">
-  <button (click)="resetFunction()">Nouvelle partie</button>
 </div>

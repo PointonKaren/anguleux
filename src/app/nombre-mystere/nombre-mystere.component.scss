@@ -2,29 +2,56 @@
 @import "../../assets/style/utils/mixins";
 
 #MysteryNumber {
-  .nm-box {
-    width: 70%;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    span {
-      color: $seven;
-      border-bottom: 1px solid $seven;
-      border-right: 1px solid $seven;
-      border-bottom-right-radius: 8px;
-      display: block;
-      padding-right: 10px;
-      padding-left: 10px;
-      padding-bottom: 5px;
-      cursor: pointer;
+  width: 80vw;
+  margin: auto;
+  text-align: center;
+  .nm {
+    &-tab {
+      width: 85%;
+      margin-left: 0px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      #intro {
+        background-color: #33343d;
+        color: $five;
+      }
+      span {
+        color: $six;
+        font-weight: bold;
+        border-top: 2px solid $seven;
+        border-right: 2px solid $seven;
+        border-left: 2px solid $seven;
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
+        display: block;
+        padding-right: 10px;
+        padding-left: 10px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        cursor: pointer;
+        position: relative;
+        top: 2px;
+      }
     }
-  }
-  .resetButton {
-    width: 200px;
-    margin: auto;
-    margin-top: 20px;
+    &-box {
+      background-color: #33343d;
+      border: 2px solid $seven;
+      border-radius: 8px;
+      border-top-left-radius: 0;
+      min-height: 500px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+    }
   }
 }

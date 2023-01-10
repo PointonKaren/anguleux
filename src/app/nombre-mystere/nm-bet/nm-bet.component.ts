@@ -14,8 +14,9 @@ export class NmBetComponent {
   tries = new FormControl(1);
 
   tryText = '';
-  betOrder = 'Pour pouvoir parier, cochez cette case. ';
-  betComment = `Si vous changez d'avis, vous pouvez passer directement à l'étape 3 sans parier ;)`;
+  betOrder = `Cette section vous permet de parier sur le nombre de tentatives qu'il vous faudra pour
+  deviner le Nombre Mystère. <br/>Pour pouvoir parier, cochez cette case : `;
+  betComment = `<br/>Si vous changez d'avis, vous pouvez passer directement à l'étape 3 sans parier ;)`;
   resetButtonText = 'Abandonner la partie';
   errorText = '';
 
@@ -218,9 +219,9 @@ export class NmBetComponent {
   changeBet = () => {
     this.tries = new FormControl(1);
     this.tryText = '';
-    this.betOrder = "Décocher pour annuler le pari, puis passer à l'étape 3.";
-    this.betComment =
-      'Si vous souhaitez modifier votre pari, utilisez le formulaire ci-dessous.';
+    this.betOrder = 'Décocher pour annuler le pari :';
+    this.betComment = ` puis passez à l'étape 3.
+      <br/>Si vous souhaitez modifier votre pari, utilisez le formulaire ci-dessous.`;
     this.changeBooleans(true, true, false, false, true);
     /** Action de changeBooleans
      * Checkbox visible et cochée, formulaire visible
